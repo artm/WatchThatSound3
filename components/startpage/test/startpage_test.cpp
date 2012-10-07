@@ -28,6 +28,17 @@ private slots:
         QVERIFY( start_page->findChild<QWidget*>("help") );
         QVERIFY( start_page->findChild<QWidget*>("help")->isVisible() );
     }
+
+    void open_inactive_on_startup() {
+        QVERIFY( start_page->findChild<QWidget*>("start_project") );
+        QVERIFY( ! start_page->findChild<QWidget*>("start_project")->isEnabled() );
+
+        QVERIFY( start_page->findChild<QWidget*>("open_study_material") );
+        QVERIFY( ! start_page->findChild<QWidget*>("open_study_material")->isEnabled() );
+
+        QVERIFY( start_page->findChild<QWidget*>("open_help") );
+        QVERIFY( ! start_page->findChild<QWidget*>("open_help")->isEnabled() );
+    }
 };
 
 QTEST_MAIN(StartPageTest)

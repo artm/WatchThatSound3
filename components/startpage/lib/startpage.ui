@@ -112,7 +112,10 @@ p, li { white-space: pre-wrap; }
              </spacer>
             </item>
             <item>
-             <widget class="QPushButton" name="pushButton">
+             <widget class="QPushButton" name="start_project">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="text">
                <string>Start Project</string>
               </property>
@@ -174,7 +177,10 @@ p, li { white-space: pre-wrap; }
              </spacer>
             </item>
             <item>
-             <widget class="QPushButton" name="pushButton_2">
+             <widget class="QPushButton" name="open_study_material">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="text">
                <string>Open</string>
               </property>
@@ -236,7 +242,10 @@ p, li { white-space: pre-wrap; }
              </spacer>
             </item>
             <item>
-             <widget class="QPushButton" name="pushButton_5">
+             <widget class="QPushButton" name="open_help">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="text">
                <string>Open</string>
               </property>
