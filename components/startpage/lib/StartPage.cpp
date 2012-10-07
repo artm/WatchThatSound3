@@ -3,8 +3,6 @@
 StartPage::StartPage(QWidget *parent) :
     QWidget(parent)
 {
-    Q_INIT_RESOURCE( startpage );
-
     QUiLoader loader;
     QFile file(":/forms/startpage.ui");
     file.open(QFile::ReadOnly);

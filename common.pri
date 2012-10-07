@@ -14,9 +14,7 @@ PRECOMPILED_HEADER = $$wts.src.root/stable.h
 INCLUDEPATH += $$wts.src.root/components
 
 # find component libraries
-# need to add them as full paths (not -L/-l) so .prl files are used
-# for linking against their dependencies
-LIBS += $$join( wts.components, ' ', $$wts.top.relative/lib/lib, .a )
+LIBS += -L $$wts.top.relative/lib/ $$join( wts.components, ' ', -l )
 
 # suppress warnings from QtSDK 4.8.1
 QMAKE_LFLAGS = -w
@@ -47,7 +45,6 @@ main_exe {
   TARGET = WatchThatSound
 } else:component {
   TEMPLATE = lib
-  CONFIG += create_prl staticlib
   DESTDIR = $$wts.top.relative/lib/
   TARGET = $$parentDirname($$_PRO_FILE_)
   wts.target.sort = "static library"
