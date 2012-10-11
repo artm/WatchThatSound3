@@ -12,3 +12,18 @@ StartPage::StartPage(QWidget *parent) :
     layout->addWidget( form );
     setLayout( layout );
 }
+
+void StartPage::connectSignals()
+{
+    QTreeView * area = findChild<QTreeView*>("library");
+    QItemSelectionModel * sel_model = area->selectionModel();
+    connect( sel_model,
+             SIGNAL(            currentChanged(QModelIndex,QModelIndex) ),
+               SLOT( on_library_currentChanged(QModelIndex,QModelIndex) ));
+
+}
+
+void StartPage::on_library_currentChanged(const QModelIndex& current,const QModelIndex&)
+{
+    findChild<QWidget *>("new_project")->setEnabled( current.isValid() );
+}

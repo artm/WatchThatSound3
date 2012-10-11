@@ -9,10 +9,11 @@ class StartPage : public QWidget
 public:
     explicit StartPage(QWidget *parent = 0);
 
+    void connectSignals();
 signals:
 
 public slots:
-
+    void on_library_currentChanged(const QModelIndex& ,const QModelIndex& );
 };
 
 #endif // STARTPAGE_HPP

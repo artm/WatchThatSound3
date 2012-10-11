@@ -6,12 +6,47 @@ class StartPageTest: public QObject
 {
     Q_OBJECT
     StartPage * start_page;
+    QStandardItemModel libraryItems, projectsItems, studyItems, getStartedItems;
 
 private slots:
     void initTestCase() {
         // given start page is displayed...
         start_page = new StartPage();
         start_page->show();
+
+        // some items for every area
+        libraryItems.setColumnCount( 1 );
+        libraryItems.appendRow( new QStandardItem("WTS_Bit_1.mov") );
+        libraryItems.appendRow( new QStandardItem("WTS_Bit_2.mov") );
+        libraryItems.appendRow( new QStandardItem("WTS_Bit_3.mov") );
+
+        projectsItems.setColumnCount( 1 );
+        projectsItems.appendRow( new QStandardItem("WTS_Bit_1.mov") );
+        projectsItems.appendRow( new QStandardItem("WTS_Bit_1.mov") );
+        projectsItems.appendRow( new QStandardItem("WTS_Bit_2.mov") );
+
+        studyItems.setColumnCount( 1 );
+        studyItems.appendRow( new QStandardItem("Rhythm") );
+        studyItems.appendRow( new QStandardItem("Pitch") );
+        studyItems.appendRow( new QStandardItem("Surprises") );
+
+        getStartedItems.setColumnCount( 1 );
+        getStartedItems.appendRow( new QStandardItem("Maak je eigen.pdf") );
+        getStartedItems.appendRow( new QStandardItem("Jaques explains.mov") );
+        getStartedItems.appendRow( new QStandardItem("Quick start.pdf") );
+
+#define SET_MODEL( area_name, model ) \
+    do { \
+    QTreeView* area = start_page->findChild<QTreeView*>(area_name); \
+    if (area) area->setModel( model ); \
+    } while(false)
+
+        SET_MODEL("library", &libraryItems);
+        SET_MODEL("projects", &projectsItems);
+        SET_MODEL("study_material", &studyItems);
+        SET_MODEL("get_started", &getStartedItems);
+
+        start_page->connectSignals();
     }
     void cleanupTestCase() {
         // don't blink the window if unnecessary
@@ -67,6 +102,14 @@ private slots:
         QVERIFY( ! start_page->findChild<QWidget*>("continue_project")->isEnabled() );
         QVERIFY( ! start_page->findChild<QWidget*>("open_study_material")->isEnabled() );
         QVERIFY( ! start_page->findChild<QWidget*>("open_get_started")->isEnabled() );
+    }
+
+    void activate_new_project_on_selection() {
+        QTreeView * area = start_page->findChild<QTreeView*>( "library" );
+        QPushButton * button = area->parent()->findChild<QPushButton*>( "new_project" );
+        // When I select the item
+        area->setCurrentIndex( libraryItems.index(0,0) );
+        QVERIFY( button->isEnabled() );
     }
 };
 
