@@ -106,18 +106,12 @@ private slots:
 #undef TEST_BUTTON
     }
 
-    void open_inactive_on_startup() {
-        QVERIFY( ! start_page->findChild<QWidget*>("new_project")->isEnabled() );
-        QVERIFY( ! start_page->findChild<QWidget*>("continue_project")->isEnabled() );
-        QVERIFY( ! start_page->findChild<QWidget*>("open_study_material")->isEnabled() );
-        QVERIFY( ! start_page->findChild<QWidget*>("open_get_started")->isEnabled() );
-    }
-
     void activate_open_buttons_on_selection() {
 #define TEST_ACTIVATION( area_name, button_name ) \
     do { \
         QTreeView * area = start_page->findChild<QTreeView*>( #area_name ); \
         QPushButton * button = area->parent()->findChild<QPushButton*>( button_name ); \
+        QVERIFY( ! button->isEnabled() ); \
         area->setCurrentIndex( area_name ## _items.index(0,0) ); \
         QVERIFY( button->isEnabled() ); \
         area->setCurrentIndex( QModelIndex() ); \
