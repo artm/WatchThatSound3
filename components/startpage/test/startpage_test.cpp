@@ -47,7 +47,10 @@ private slots:
         SET_MODEL("get_started", &getStartedItems);
 
         start_page->connectSignals();
+
+#undef SET_MODEL
     }
+
     void cleanupTestCase() {
         // don't blink the window if unnecessary
         start_page->hide();
@@ -79,6 +82,9 @@ private slots:
         TEST_AREA( start_page, "projects", "Projects" );
         TEST_AREA( start_page, "study_material", "Study material" );
         TEST_AREA( start_page, "get_started", "Get started" );
+
+#undef TEST_AREA
+#undef TEST_LABEL
     }
 
     void buttons_under_start_page_areas()
@@ -90,11 +96,14 @@ private slots:
     QVERIFY( button ); \
     QVERIFY( button->text().contains( button_text ) ); \
     } while(false)
+
         TEST_BUTTON( "library", "add_video", "Add existing video" );
         TEST_BUTTON( "library", "new_project", "New Project" );
         TEST_BUTTON( "projects", "continue_project", "Continue Project" );
         TEST_BUTTON( "study_material", "open_study_material", "Open" );
         TEST_BUTTON( "get_started", "open_get_started", "Open" );
+
+#undef TEST_BUTTON
     }
 
     void open_inactive_on_startup() {
