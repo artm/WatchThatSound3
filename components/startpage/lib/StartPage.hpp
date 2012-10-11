@@ -14,6 +14,9 @@ signals:
 
 public slots:
     void on_library_currentChanged(const QModelIndex& ,const QModelIndex& );
+    void on_projects_currentChanged(const QModelIndex& ,const QModelIndex& );
+    void on_study_material_currentChanged(const QModelIndex& ,const QModelIndex& );
+    void on_get_started_currentChanged(const QModelIndex& ,const QModelIndex& );
 };
 
 #endif // STARTPAGE_HPP

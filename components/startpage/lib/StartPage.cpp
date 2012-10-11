@@ -15,15 +15,48 @@ StartPage::StartPage(QWidget *parent) :
 
 void StartPage::connectSignals()
 {
-    QTreeView * area = findChild<QTreeView*>("library");
-    QItemSelectionModel * sel_model = area->selectionModel();
-    connect( sel_model,
-             SIGNAL(            currentChanged(QModelIndex,QModelIndex) ),
-               SLOT( on_library_currentChanged(QModelIndex,QModelIndex) ));
+#define CONNECT_CURRENT_CHANGED( area_name ) \
+    do { \
+    QTreeView * area = findChild<QTreeView*>( #area_name ); \
+    Q_ASSERT(area); \
+    QItemSelectionModel * sel_model = area->selectionModel(); \
+    connect( sel_model, \
+             SIGNAL( currentChanged(QModelIndex,QModelIndex) ), \
+               SLOT( on_ ## area_name ## _currentChanged(QModelIndex,QModelIndex) )); \
+    } while(false)
 
+    CONNECT_CURRENT_CHANGED( library );
+    CONNECT_CURRENT_CHANGED( projects );
+    CONNECT_CURRENT_CHANGED( study_material );
+    CONNECT_CURRENT_CHANGED( get_started );
+
+#undef CONNECT_CURRENT_CHANGED
 }
 
 void StartPage::on_library_currentChanged(const QModelIndex& current,const QModelIndex&)
 {
-    findChild<QWidget *>("new_project")->setEnabled( current.isValid() );
+    QWidget * button = findChild<QWidget *>("new_project");
+    Q_ASSERT(button);
+    button->setEnabled( current.isValid() );
+}
+
+void StartPage::on_projects_currentChanged(const QModelIndex& current,const QModelIndex&)
+{
+    QWidget * button = findChild<QWidget *>("continue_project");
+    Q_ASSERT(button);
+    button->setEnabled( current.isValid() );
+}
+
+void StartPage::on_study_material_currentChanged(const QModelIndex& current,const QModelIndex&)
+{
+    QWidget * button = findChild<QWidget *>("open_study_material");
+    Q_ASSERT(button);
+    button->setEnabled( current.isValid() );
+}
+
+void StartPage::on_get_started_currentChanged(const QModelIndex& current,const QModelIndex&)
+{
+    QWidget * button = findChild<QWidget *>("open_get_started");
+    Q_ASSERT(button);
+    button->setEnabled( current.isValid() );
 }

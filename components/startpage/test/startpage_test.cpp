@@ -6,7 +6,7 @@ class StartPageTest: public QObject
 {
     Q_OBJECT
     StartPage * start_page;
-    QStandardItemModel libraryItems, projectsItems, studyItems, getStartedItems;
+    QStandardItemModel library_items, projects_items, study_material_items, get_started_items;
 
 private slots:
     void initTestCase() {
@@ -15,25 +15,25 @@ private slots:
         start_page->show();
 
         // some items for every area
-        libraryItems.setColumnCount( 1 );
-        libraryItems.appendRow( new QStandardItem("WTS_Bit_1.mov") );
-        libraryItems.appendRow( new QStandardItem("WTS_Bit_2.mov") );
-        libraryItems.appendRow( new QStandardItem("WTS_Bit_3.mov") );
+        library_items.setColumnCount( 1 );
+        library_items.appendRow( new QStandardItem("WTS_Bit_1.mov") );
+        library_items.appendRow( new QStandardItem("WTS_Bit_2.mov") );
+        library_items.appendRow( new QStandardItem("WTS_Bit_3.mov") );
 
-        projectsItems.setColumnCount( 1 );
-        projectsItems.appendRow( new QStandardItem("WTS_Bit_1.mov") );
-        projectsItems.appendRow( new QStandardItem("WTS_Bit_1.mov") );
-        projectsItems.appendRow( new QStandardItem("WTS_Bit_2.mov") );
+        projects_items.setColumnCount( 1 );
+        projects_items.appendRow( new QStandardItem("WTS_Bit_1.mov") );
+        projects_items.appendRow( new QStandardItem("WTS_Bit_1.mov") );
+        projects_items.appendRow( new QStandardItem("WTS_Bit_2.mov") );
 
-        studyItems.setColumnCount( 1 );
-        studyItems.appendRow( new QStandardItem("Rhythm") );
-        studyItems.appendRow( new QStandardItem("Pitch") );
-        studyItems.appendRow( new QStandardItem("Surprises") );
+        study_material_items.setColumnCount( 1 );
+        study_material_items.appendRow( new QStandardItem("Rhythm") );
+        study_material_items.appendRow( new QStandardItem("Pitch") );
+        study_material_items.appendRow( new QStandardItem("Surprises") );
 
-        getStartedItems.setColumnCount( 1 );
-        getStartedItems.appendRow( new QStandardItem("Maak je eigen.pdf") );
-        getStartedItems.appendRow( new QStandardItem("Jaques explains.mov") );
-        getStartedItems.appendRow( new QStandardItem("Quick start.pdf") );
+        get_started_items.setColumnCount( 1 );
+        get_started_items.appendRow( new QStandardItem("Maak je eigen.pdf") );
+        get_started_items.appendRow( new QStandardItem("Jaques explains.mov") );
+        get_started_items.appendRow( new QStandardItem("Quick start.pdf") );
 
 #define SET_MODEL( area_name, model ) \
     do { \
@@ -41,10 +41,10 @@ private slots:
     if (area) area->setModel( model ); \
     } while(false)
 
-        SET_MODEL("library", &libraryItems);
-        SET_MODEL("projects", &projectsItems);
-        SET_MODEL("study_material", &studyItems);
-        SET_MODEL("get_started", &getStartedItems);
+        SET_MODEL("library", &library_items);
+        SET_MODEL("projects", &projects_items);
+        SET_MODEL("study_material", &study_material_items);
+        SET_MODEL("get_started", &get_started_items);
 
         start_page->connectSignals();
 
@@ -113,12 +113,23 @@ private slots:
         QVERIFY( ! start_page->findChild<QWidget*>("open_get_started")->isEnabled() );
     }
 
-    void activate_new_project_on_selection() {
-        QTreeView * area = start_page->findChild<QTreeView*>( "library" );
-        QPushButton * button = area->parent()->findChild<QPushButton*>( "new_project" );
-        // When I select the item
-        area->setCurrentIndex( libraryItems.index(0,0) );
-        QVERIFY( button->isEnabled() );
+    void activate_open_buttons_on_selection() {
+#define TEST_ACTIVATION( area_name, button_name ) \
+    do { \
+        QTreeView * area = start_page->findChild<QTreeView*>( #area_name ); \
+        QPushButton * button = area->parent()->findChild<QPushButton*>( button_name ); \
+        area->setCurrentIndex( area_name ## _items.index(0,0) ); \
+        QVERIFY( button->isEnabled() ); \
+        area->setCurrentIndex( QModelIndex() ); \
+        QVERIFY( ! button->isEnabled() ); \
+    } while(false)
+
+        TEST_ACTIVATION( library, "new_project" );
+        TEST_ACTIVATION( projects, "continue_project" );
+        TEST_ACTIVATION( study_material, "open_study_material" );
+        TEST_ACTIVATION( get_started, "open_get_started" );
+
+#undef TEST_ACTIVATION
     }
 };
 
