@@ -11,6 +11,8 @@ StartPage::StartPage(QWidget *parent) :
     QVBoxLayout *layout = new QVBoxLayout;
     layout->addWidget( form );
     setLayout( layout );
+
+    QMetaObject::connectSlotsByName( this );
 }
 
 void StartPage::connectSignals()
@@ -22,7 +24,7 @@ void StartPage::connectSignals()
     QItemSelectionModel * sel_model = area->selectionModel(); \
     connect( sel_model, \
              SIGNAL( currentChanged(QModelIndex,QModelIndex) ), \
-               SLOT( on_ ## area_name ## _currentChanged(QModelIndex,QModelIndex) )); \
+               SLOT( handle_ ## area_name ## _currentChanged(QModelIndex,QModelIndex) )); \
     } while(false)
 
     CONNECT_CURRENT_CHANGED( library );
@@ -33,30 +35,48 @@ void StartPage::connectSignals()
 #undef CONNECT_CURRENT_CHANGED
 }
 
-void StartPage::on_library_currentChanged(const QModelIndex& current,const QModelIndex&)
+void StartPage::handle_library_currentChanged(const QModelIndex& current,const QModelIndex&)
 {
     QWidget * button = findChild<QWidget *>("new_project");
     Q_ASSERT(button);
     button->setEnabled( current.isValid() );
 }
 
-void StartPage::on_projects_currentChanged(const QModelIndex& current,const QModelIndex&)
+void StartPage::handle_projects_currentChanged(const QModelIndex& current,const QModelIndex&)
 {
     QWidget * button = findChild<QWidget *>("continue_project");
     Q_ASSERT(button);
     button->setEnabled( current.isValid() );
 }
 
-void StartPage::on_study_material_currentChanged(const QModelIndex& current,const QModelIndex&)
+void StartPage::handle_study_material_currentChanged(const QModelIndex& current,const QModelIndex&)
 {
     QWidget * button = findChild<QWidget *>("open_study_material");
     Q_ASSERT(button);
     button->setEnabled( current.isValid() );
 }
 
-void StartPage::on_get_started_currentChanged(const QModelIndex& current,const QModelIndex&)
+void StartPage::handle_get_started_currentChanged(const QModelIndex& current,const QModelIndex&)
 {
     QWidget * button = findChild<QWidget *>("open_get_started");
     Q_ASSERT(button);
     button->setEnabled( current.isValid() );
+}
+
+void StartPage::on_new_project_clicked()
+{
+    QUiLoader loader;
+    QFile file(":/forms/new_project_dialog.ui");
+    file.open(QFile::ReadOnly);
+    QDialog * dialog = qobject_cast<QDialog *>(loader.load(&file, this));
+    file.close();
+
+    Q_ASSERT(dialog);
+
+    QDialogButtonBox* bbox = dialog->findChild<QDialogButtonBox*>("buttonBox");
+    bbox->addButton("Create New Project", QDialogButtonBox::AcceptRole);
+
+    if (dialog->exec() == QDialog::Accepted) {
+        emit create_new_project( dialog->findChild<QLineEdit*>("project_name")->text() );
+    }
 }

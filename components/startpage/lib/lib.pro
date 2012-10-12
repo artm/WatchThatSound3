@@ -5,9 +5,11 @@ wts.top.relative = ../../..
 include( $$wts.top.relative/common.pri )
 
 FORMS += \
-    startpage.ui
+    startpage.ui \
+    new_project_dialog.ui
 
 RESOURCES += \
     startpage.qrc
+
 
 

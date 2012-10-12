@@ -18,6 +18,7 @@ extern "C" {
 
 #ifdef QT_TESTLIB_LIB
 #include <QTest>
+#include <QSignalSpy>
 #endif
 
 #ifdef QT_UI_TOOLS_LIB
