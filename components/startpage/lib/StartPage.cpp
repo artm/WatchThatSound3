@@ -77,6 +77,8 @@ void StartPage::on_new_project_clicked()
     bbox->addButton("Create New Project", QDialogButtonBox::AcceptRole);
 
     if (dialog->exec() == QDialog::Accepted) {
-        emit create_new_project( dialog->findChild<QLineEdit*>("project_name")->text() );
+        QTreeView * area = findChild<QTreeView*>("library");
+        QString file_name = area->model()->data( area->currentIndex() ).toString();
+        emit create_new_project( dialog->findChild<QLineEdit*>("project_name")->text(), file_name );
     }
 }

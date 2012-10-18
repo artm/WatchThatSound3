@@ -143,11 +143,12 @@ private slots:
     {
         // the same given as above...
         QTreeView * area = start_page->findChild<QTreeView*>( "library" );
-        area->setCurrentIndex( library_items.index(0,0) );
+        QModelIndex index_00 = library_items.index(0,0);
+        area->setCurrentIndex( index_00 );
         QPushButton * button = area->parent()->findChild<QPushButton*>( "new_project" );
         // this will fire after the modal dialog is up
         QTimer::singleShot(1, this, SLOT( fill_in_project_name_and_accept() ));
-        QSignalSpy spy(start_page, SIGNAL(create_new_project(QString)));
+        QSignalSpy spy(start_page, SIGNAL(create_new_project(QString, QString)));
         button->click();
         QCOMPARE(spy.count(), 1);
         QList<QVariant> arguments = spy.takeFirst();

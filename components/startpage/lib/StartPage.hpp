@@ -11,7 +11,7 @@ public:
 
     void connectSignals();
 signals:
-    void create_new_project(QString);
+    void create_new_project(QString name, QString original_video);
 
 public slots:
     void handle_library_currentChanged(const QModelIndex& ,const QModelIndex& );
