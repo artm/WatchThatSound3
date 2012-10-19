@@ -170,6 +170,47 @@ private slots:
         QCOMPARE(arguments.at(0), study_material_items.data( index_00 ) );
     }
 
+    // unit tests
+    void test_selected_filename_data()
+    {
+        QTest::addColumn<QString>("area_name");
+        QTest::addColumn<int>("row_num");
+        QTest::addColumn<QString>("file_name");
+
+        QTest::newRow("none in library")   << "library" << -1 << QString();
+        QTest::newRow("first in library")  << "library" <<  0 << "WTS_Bit_1.mov";
+        QTest::newRow("second in library") << "library" <<  1 << "WTS_Bit_2.mov";
+        QTest::newRow("third in library")  << "library" <<  2 << "WTS_Bit_3.mov";
+
+        QTest::newRow("none in projects")   << "projects" << -1 << QString();
+        QTest::newRow("first in projects")  << "projects" <<  0 << "WTS_Bit_1.mov";
+        QTest::newRow("second in projects") << "projects" <<  1 << "WTS_Bit_1.mov";
+        QTest::newRow("third in projects")  << "projects" <<  2 << "WTS_Bit_2.mov";
+
+        QTest::newRow("none in study_material")   << "study_material" << -1 << QString();
+        QTest::newRow("first in study_material")  << "study_material" <<  0 << "Rhythm";
+        QTest::newRow("second in study_material") << "study_material" <<  1 << "Pitch";
+        QTest::newRow("third in study_material")  << "study_material" <<  2 << "Surprises";
+
+        QTest::newRow("none in get_started")   << "get_started" << -1 << QString();
+        QTest::newRow("first in get_started")  << "get_started" <<  0 << "Maak je eigen.pdf";
+        QTest::newRow("second in get_started") << "get_started" <<  1 << "Jaques explains.mov";
+        QTest::newRow("third in get_started")  << "get_started" <<  2 << "Quick start.pdf";
+
+    }
+
+    void test_selected_filename()
+    {
+        QFETCH(QString, area_name);
+        QFETCH(int, row_num);
+        QFETCH(QString, file_name);
+
+        QTreeView * area = start_page->findChild<QTreeView*>( area_name );
+        area->setCurrentIndex( (row_num >= 0)
+                               ? area->model()->index(row_num, 0)
+                               : QModelIndex() );
+        QCOMPARE( start_page->selected_filename( area_name ) , file_name );
+    }
 
 public slots:
     // public slots don't get run as individual tests

@@ -10,6 +10,8 @@ public:
     explicit StartPage(QWidget *parent = 0);
 
     void connectSignals();
+    QString selected_filename(const QString& area_name);
+
 signals:
     void create_new_project(QString name, QString original_video);
     void open_file(QString file_name);
@@ -23,6 +25,7 @@ public slots:
     // auto-connected
     void on_new_project_clicked();
     void on_open_study_material_clicked();
+
 };
 
 #endif // STARTPAGE_HPP

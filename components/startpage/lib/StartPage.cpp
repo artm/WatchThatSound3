@@ -77,15 +77,19 @@ void StartPage::on_new_project_clicked()
     bbox->addButton("Create New Project", QDialogButtonBox::AcceptRole);
 
     if (dialog->exec() == QDialog::Accepted) {
-        QTreeView * area = findChild<QTreeView*>("library");
-        QString file_name = area->model()->data( area->currentIndex() ).toString();
-        emit create_new_project( dialog->findChild<QLineEdit*>("project_name")->text(), file_name );
+        emit create_new_project( dialog->findChild<QLineEdit*>("project_name")->text(),
+                                 selected_filename("library") );
     }
 }
 
 void StartPage::on_open_study_material_clicked()
 {
-    QTreeView * area = findChild<QTreeView*>("study_material");
-    QString file_name = area->model()->data( area->currentIndex() ).toString();
-    emit open_file( file_name );
+    emit open_file( selected_filename("study_material") );
+}
+
+QString StartPage::selected_filename(const QString& area_name)
+{
+    QTreeView * area = findChild<QTreeView*>( area_name );
+    Q_ASSERT( area );
+    return area->model()->data( area->currentIndex() ).toString();
 }
