@@ -153,11 +153,28 @@ private slots:
         QCOMPARE(spy.count(), 1);
         QList<QVariant> arguments = spy.takeFirst();
         QCOMPARE(arguments.at(0).toString(), QString("Test Project"));
+        QCOMPARE(arguments.at(1), library_items.data( index_00 ));
     }
+
+    void plays_video_from_study_material()
+    {
+        QTreeView * area = start_page->findChild<QTreeView*>( "study_material" );
+        QModelIndex index_00 = study_material_items.index(0,0);
+        area->setCurrentIndex( index_00 );
+        QPushButton * button = area->parent()->findChild<QPushButton*>( "open_study_material" );
+        // this will fire after the modal dialog is up
+        QSignalSpy spy(start_page, SIGNAL(open_file(QString)));
+        button->click();
+        QCOMPARE(spy.count(), 1);
+        QList<QVariant> arguments = spy.takeFirst();
+        QCOMPARE(arguments.at(0), study_material_items.data( index_00 ) );
+    }
+
 
 public slots:
     // public slots don't get run as individual tests
-    void fill_in_project_name_and_accept() {
+    void fill_in_project_name_and_accept()
+    {
         QDialog * active_modal = qobject_cast<QDialog*>(qApp->activeModalWidget());
         Acceptor acceptor( active_modal, true );
         QLineEdit* field = active_modal->findChild<QLineEdit*>("project_name");
@@ -165,7 +182,8 @@ public slots:
         field->setText("Test Project");
     }
 
-    void test_new_project_dialog_and_cancel() {
+    void test_new_project_dialog_and_cancel()
+    {
         // see if the dialog looks right...
         QDialog * active_modal = qobject_cast<QDialog*>(qApp->activeModalWidget());
         QVERIFY( active_modal );

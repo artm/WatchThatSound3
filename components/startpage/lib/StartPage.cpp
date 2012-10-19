@@ -82,3 +82,10 @@ void StartPage::on_new_project_clicked()
         emit create_new_project( dialog->findChild<QLineEdit*>("project_name")->text(), file_name );
     }
 }
+
+void StartPage::on_open_study_material_clicked()
+{
+    QTreeView * area = findChild<QTreeView*>("study_material");
+    QString file_name = area->model()->data( area->currentIndex() ).toString();
+    emit open_file( file_name );
+}
