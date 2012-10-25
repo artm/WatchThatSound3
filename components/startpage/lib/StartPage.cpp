@@ -87,6 +87,11 @@ void StartPage::on_open_study_material_clicked()
     emit open_file( selected_filename("study_material") );
 }
 
+void StartPage::on_open_get_started_clicked()
+{
+    emit open_file( selected_filename("get_started") );
+}
+
 QString StartPage::selected_filename(const QString& area_name)
 {
     QTreeView * area = findChild<QTreeView*>( area_name );

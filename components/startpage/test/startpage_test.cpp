@@ -170,6 +170,20 @@ private slots:
         QCOMPARE(arguments.at(0), study_material_items.data( index_00 ) );
     }
 
+    void plays_video_from_get_started()
+    {
+        QTreeView * area = start_page->findChild<QTreeView*>( "get_started" );
+        QModelIndex index_00 = get_started_items.index(0,0);
+        area->setCurrentIndex( index_00 );
+        QPushButton * button = area->parent()->findChild<QPushButton*>( "open_get_started" );
+        // this will fire after the modal dialog is up
+        QSignalSpy spy(start_page, SIGNAL(open_file(QString)));
+        button->click();
+        QCOMPARE(spy.count(), 1);
+        QList<QVariant> arguments = spy.takeFirst();
+        QCOMPARE(arguments.at(0), get_started_items.data( index_00 ) );
+    }
+
     // unit tests
     void test_selected_filename_data()
     {

@@ -25,6 +25,7 @@ public slots:
     // auto-connected
     void on_new_project_clicked();
     void on_open_study_material_clicked();
+    void on_open_get_started_clicked();
 
 };
 
