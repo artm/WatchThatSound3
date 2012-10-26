@@ -156,32 +156,32 @@ private slots:
         QCOMPARE(arguments.at(1), library_items.data( index_00 ));
     }
 
-    void plays_video_from_study_material()
+    void opens_files_from_study_material_data()
     {
-        QTreeView * area = start_page->findChild<QTreeView*>( "study_material" );
-        QModelIndex index_00 = study_material_items.index(0,0);
-        area->setCurrentIndex( index_00 );
-        QPushButton * button = area->parent()->findChild<QPushButton*>( "open_study_material" );
-        // this will fire after the modal dialog is up
-        QSignalSpy spy(start_page, SIGNAL(open_file(QString)));
-        button->click();
-        QCOMPARE(spy.count(), 1);
-        QList<QVariant> arguments = spy.takeFirst();
-        QCOMPARE(arguments.at(0), study_material_items.data( index_00 ) );
+        QTest::addColumn<QString>("area_name");
+        QTest::addColumn<QString>("button_name");
+        QTest::newRow("study material") << "study_material" << "open_study_material";
+        QTest::newRow("get started") << "get_started" << "open_get_started";
     }
 
-    void plays_video_from_get_started()
+    void opens_reference_documents()
     {
-        QTreeView * area = start_page->findChild<QTreeView*>( "get_started" );
-        QModelIndex index_00 = get_started_items.index(0,0);
-        area->setCurrentIndex( index_00 );
-        QPushButton * button = area->parent()->findChild<QPushButton*>( "open_get_started" );
-        // this will fire after the modal dialog is up
-        QSignalSpy spy(start_page, SIGNAL(open_file(QString)));
-        button->click();
-        QCOMPARE(spy.count(), 1);
-        QList<QVariant> arguments = spy.takeFirst();
-        QCOMPARE(arguments.at(0), get_started_items.data( index_00 ) );
+        QFETCH( QString, area_name );
+        QFETCH( QString, button_name );
+
+        QTreeView * area = start_page->findChild<QTreeView*>( area_name );
+        QAbstractItemModel * model = area->model();
+        for(int row = 0; row < area->model()->rowCount(); ++row) {
+            QModelIndex the_index = model->index(row,0);
+            area->setCurrentIndex( the_index );
+            QPushButton * button = area->parent()->findChild<QPushButton*>( button_name );
+            // this will fire after the modal dialog is up
+            QSignalSpy spy(start_page, SIGNAL(open_file(QString)));
+            button->click();
+            QCOMPARE(spy.count(), 1);
+            QList<QVariant> arguments = spy.takeFirst();
+            QCOMPARE(arguments.at(0), model->data( the_index ) );
+        }
     }
 
     // unit tests
