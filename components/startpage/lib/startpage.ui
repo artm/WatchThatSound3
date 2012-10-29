@@ -94,7 +94,7 @@ p, li { white-space: pre-wrap; }
             <item>
              <widget class="QPushButton" name="add_video">
               <property name="text">
-               <string>Add existing video</string>
+               <string>Add an Existing Video</string>
               </property>
              </widget>
             </item>

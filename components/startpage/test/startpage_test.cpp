@@ -1,6 +1,7 @@
 #include "stable.h"
 
 #include "startpage/StartPage"
+#include "dialog_spec_helper.hpp"
 
 class StartPageTest: public QObject
 {
@@ -56,7 +57,6 @@ private slots:
         start_page->hide();
     }
 
-
     void contains_item_collections()
     {
         QWidget * area;
@@ -97,7 +97,7 @@ private slots:
     QVERIFY( button->text().contains( button_text ) ); \
     } while(false)
 
-        TEST_BUTTON( "library", "add_video", "Add existing video" );
+        TEST_BUTTON( "library", "add_video", "Add an Existing Video" );
         TEST_BUTTON( "library", "new_project", "New Project" );
         TEST_BUTTON( "projects", "continue_project", "Continue Project" );
         TEST_BUTTON( "study_material", "open_study_material", "Open" );
@@ -139,6 +139,23 @@ private slots:
         QCOMPARE( qApp->activeWindow(), start_page );
     }
 
+    void import_video()
+    {
+        QPushButton * add_button = find_widget_with_text<QPushButton*>(start_page, "Add an Existing Video");
+        QVERIFY( add_button );
+
+        QSignalSpy spy(start_page, SIGNAL(import_video(QString)));
+
+        // test if the file dialog shows up
+        DialogSpecHelper helper(true);
+        connect(&helper, SIGNAL(run_injected_code(QWidget*)), SLOT(test_add_video_dialog(QWidget*)));
+        add_button->click();
+        QVERIFY( helper.injected_method_succeded() );
+        QCOMPARE( spy.count(), 1 );
+        QList<QVariant> arguments = spy.takeFirst();
+        QVERIFY( arguments.at(0).toString().endsWith("fake.mov") );
+    }
+
     void creating_a_project()
     {
         // the same given as above...
@@ -156,7 +173,7 @@ private slots:
         QCOMPARE(arguments.at(1), library_items.data( index_00 ));
     }
 
-    void opens_files_from_study_material_data()
+    void opens_reference_documents_data()
     {
         QTest::addColumn<QString>("area_name");
         QTest::addColumn<QString>("button_name");
@@ -228,10 +245,16 @@ private slots:
 
 public slots:
     // public slots don't get run as individual tests
+    void reject_active_modal() {
+        QDialog * active_modal = qobject_cast<QDialog*>(qApp->activeModalWidget());
+        QVERIFY( active_modal );
+        active_modal->reject();
+    }
+
     void fill_in_project_name_and_accept()
     {
         QDialog * active_modal = qobject_cast<QDialog*>(qApp->activeModalWidget());
-        Acceptor acceptor( active_modal, true );
+        ModalDialogTester acceptor( active_modal, true );
         QLineEdit* field = active_modal->findChild<QLineEdit*>("project_name");
         QVERIFY( field );
         field->setText("Test Project");
@@ -242,13 +265,23 @@ public slots:
         // see if the dialog looks right...
         QDialog * active_modal = qobject_cast<QDialog*>(qApp->activeModalWidget());
         QVERIFY( active_modal );
-        Acceptor acceptor( active_modal, false );
+        ModalDialogTester acceptor( active_modal, false );
 
         QVERIFY( active_modal->windowTitle() == "New Project from Video" );
         QVERIFY( find_widget_with_text<QLabel*>(active_modal, "Choose a name for your project" ) );
         QVERIFY( find_widget_with_text<QLineEdit*>(active_modal, "Untitled Project" ) );
         QVERIFY( find_widget_with_text<QPushButton*>( active_modal, "Cancel") );
         QVERIFY( find_widget_with_text<QPushButton*>( active_modal, "Create New Project") );
+    }
+
+    void test_add_video_dialog(QWidget * active_modal) {
+        QCOMPARE( active_modal->windowTitle(), QString("Add an Existing Video") );
+        QFileDialog * dialog = qobject_cast<QFileDialog *>(active_modal);
+        QVERIFY( dialog );
+        // make it accept non-existing file just for testing
+        dialog->setFileMode(QFileDialog::AnyFile);
+        dialog->setAcceptMode(QFileDialog::AcceptSave);
+        dialog->selectFile( "fake.mov" );
     }
 
 private:
@@ -263,14 +296,14 @@ private:
         return NULL;
     }
 
-    class Acceptor {
+    class ModalDialogTester {
         QDialog * dialog;
         bool accept;
     public:
-        Acceptor(QDialog * d, bool a) :
+        ModalDialogTester(QDialog * d, bool a) :
             dialog(d), accept(a)
         {}
-        ~Acceptor() {
+        ~ModalDialogTester() {
             if (dialog) {
                 if (accept)
                     dialog->accept();
@@ -279,6 +312,7 @@ private:
             }
         }
     };
+
 
 };
 

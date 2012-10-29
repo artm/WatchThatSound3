@@ -15,6 +15,7 @@ public:
 signals:
     void create_new_project(QString name, QString original_video);
     void open_file(QString file_name);
+    void import_video(QString file_name);
 
 public slots:
     void handle_library_currentChanged(const QModelIndex& ,const QModelIndex& );
@@ -26,6 +27,7 @@ public slots:
     void on_new_project_clicked();
     void on_open_study_material_clicked();
     void on_open_get_started_clicked();
+    void on_add_video_clicked();
 
 };
 

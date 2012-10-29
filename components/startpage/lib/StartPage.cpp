@@ -98,3 +98,14 @@ QString StartPage::selected_filename(const QString& area_name)
     Q_ASSERT( area );
     return area->model()->data( area->currentIndex() ).toString();
 }
+
+void StartPage::on_add_video_clicked()
+{
+    QString file_name =
+            QFileDialog::getOpenFileName(
+                this,
+                "Add an Existing Video",
+                "",
+                "Video Files (*.mov *.avi)");
+    emit import_video(file_name);
+}
