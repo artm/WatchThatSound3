@@ -131,12 +131,10 @@ private slots:
         QTreeView * area = start_page->findChild<QTreeView*>( "library" );
         area->setCurrentIndex( library_items.index(0,0) );
         QPushButton * button = area->parent()->findChild<QPushButton*>( "new_project" );
-        // this will fire after the modal dialog is up
-        QTimer::singleShot(1, this, SLOT( test_new_project_dialog_and_cancel() ));
+        DialogSpecHelper helper(false);
+        connect(&helper, SIGNAL(run_injected_code(QWidget*)), SLOT( verify_new_project_dialog(QWidget*)));
         button->click();
-        // test the application state after cancelling the dialog
-        QVERIFY( ! qApp->activeModalWidget() );
-        QCOMPARE( qApp->activeWindow(), start_page );
+        QVERIFY( helper.injected_method_succeded() );
     }
 
     void import_video()
@@ -163,8 +161,8 @@ private slots:
         QModelIndex index_00 = library_items.index(0,0);
         area->setCurrentIndex( index_00 );
         QPushButton * button = area->parent()->findChild<QPushButton*>( "new_project" );
-        // this will fire after the modal dialog is up
-        QTimer::singleShot(1, this, SLOT( fill_in_project_name_and_accept() ));
+        DialogSpecHelper helper(true);
+        connect(&helper,SIGNAL(run_injected_code(QWidget*)), SLOT(fill_in_project_name(QWidget*)));
         QSignalSpy spy(start_page, SIGNAL(create_new_project(QString, QString)));
         button->click();
         QCOMPARE(spy.count(), 1);
@@ -251,22 +249,16 @@ public slots:
         active_modal->reject();
     }
 
-    void fill_in_project_name_and_accept()
+    void fill_in_project_name(QWidget*active_modal)
     {
-        QDialog * active_modal = qobject_cast<QDialog*>(qApp->activeModalWidget());
-        ModalDialogTester acceptor( active_modal, true );
         QLineEdit* field = active_modal->findChild<QLineEdit*>("project_name");
         QVERIFY( field );
         field->setText("Test Project");
     }
 
-    void test_new_project_dialog_and_cancel()
+    void verify_new_project_dialog(QWidget*active_modal)
     {
         // see if the dialog looks right...
-        QDialog * active_modal = qobject_cast<QDialog*>(qApp->activeModalWidget());
-        QVERIFY( active_modal );
-        ModalDialogTester acceptor( active_modal, false );
-
         QVERIFY( active_modal->windowTitle() == "New Project from Video" );
         QVERIFY( find_widget_with_text<QLabel*>(active_modal, "Choose a name for your project" ) );
         QVERIFY( find_widget_with_text<QLineEdit*>(active_modal, "Untitled Project" ) );
@@ -295,25 +287,6 @@ private:
         }
         return NULL;
     }
-
-    class ModalDialogTester {
-        QDialog * dialog;
-        bool accept;
-    public:
-        ModalDialogTester(QDialog * d, bool a) :
-            dialog(d), accept(a)
-        {}
-        ~ModalDialogTester() {
-            if (dialog) {
-                if (accept)
-                    dialog->accept();
-                else
-                    dialog->reject();
-            }
-        }
-    };
-
-
 };
 
 QTEST_MAIN(StartPageTest)
