@@ -14,7 +14,7 @@ PRECOMPILED_HEADER = $$wts.src.root/stable.h
 INCLUDEPATH += $$wts.src.root/components
 
 # find component libraries
-LIBS += -L $$wts.top.relative/lib/ $$join( wts.components, ' ', -l )
+LIBS += -L$$wts.top.relative/lib/ $$join(wts.components,' -l',-l)
 
 # suppress warnings from QtSDK 4.8.1
 QMAKE_LFLAGS = -w
