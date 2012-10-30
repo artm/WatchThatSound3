@@ -79,12 +79,27 @@ p, li { white-space: pre-wrap; }
           </widget>
          </item>
          <item>
-          <widget class="QTreeView" name="library">
+          <widget class="QListView" name="library">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
+           </property>
+           <property name="horizontalScrollBarPolicy">
+            <enum>Qt::ScrollBarAsNeeded</enum>
+           </property>
+           <property name="flow">
+            <enum>QListView::LeftToRight</enum>
+           </property>
+           <property name="isWrapping" stdset="0">
+            <bool>true</bool>
+           </property>
+           <property name="layoutMode">
+            <enum>QListView::Batched</enum>
+           </property>
+           <property name="viewMode">
+            <enum>QListView::IconMode</enum>
            </property>
           </widget>
          </item>
@@ -154,12 +169,27 @@ p, li { white-space: pre-wrap; }
           </widget>
          </item>
          <item>
-          <widget class="QTreeView" name="projects">
+          <widget class="QListView" name="projects">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
+           </property>
+           <property name="horizontalScrollBarPolicy">
+            <enum>Qt::ScrollBarAsNeeded</enum>
+           </property>
+           <property name="flow">
+            <enum>QListView::LeftToRight</enum>
+           </property>
+           <property name="isWrapping" stdset="0">
+            <bool>true</bool>
+           </property>
+           <property name="layoutMode">
+            <enum>QListView::Batched</enum>
+           </property>
+           <property name="viewMode">
+            <enum>QListView::IconMode</enum>
            </property>
           </widget>
          </item>
@@ -219,12 +249,27 @@ p, li { white-space: pre-wrap; }
           </widget>
          </item>
          <item>
-          <widget class="QTreeView" name="study_material">
+          <widget class="QListView" name="study_material">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
+           </property>
+           <property name="horizontalScrollBarPolicy">
+            <enum>Qt::ScrollBarAsNeeded</enum>
+           </property>
+           <property name="flow">
+            <enum>QListView::LeftToRight</enum>
+           </property>
+           <property name="isWrapping" stdset="0">
+            <bool>true</bool>
+           </property>
+           <property name="layoutMode">
+            <enum>QListView::Batched</enum>
+           </property>
+           <property name="viewMode">
+            <enum>QListView::IconMode</enum>
            </property>
           </widget>
          </item>
@@ -269,12 +314,27 @@ p, li { white-space: pre-wrap; }
           </widget>
          </item>
          <item>
-          <widget class="QTreeView" name="get_started">
+          <widget class="QListView" name="get_started">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
+           </property>
+           <property name="horizontalScrollBarPolicy">
+            <enum>Qt::ScrollBarAsNeeded</enum>
+           </property>
+           <property name="flow">
+            <enum>QListView::LeftToRight</enum>
+           </property>
+           <property name="isWrapping" stdset="0">
+            <bool>true</bool>
+           </property>
+           <property name="layoutMode">
+            <enum>QListView::Batched</enum>
+           </property>
+           <property name="viewMode">
+            <enum>QListView::IconMode</enum>
            </property>
           </widget>
          </item>

@@ -1,6 +1,45 @@
 #include "startpage/StartPage"
 #include "utils/Stub"
 
+QStandardItemModel models[4];
+void init_models(StartPage * start_page)
+{
+#define SET_MODEL( area_name, model ) \
+    do { \
+    QAbstractItemView* area = start_page->findChild<QAbstractItemView*>(area_name); \
+    if (area) area->setModel( model ); \
+    } while(false)
+
+    models[0].setColumnCount( 1 );
+    models[0].appendRow( new QStandardItem("WTS_Bit_1.mov") );
+    models[0].appendRow( new QStandardItem("WTS_Bit_2.mov") );
+    models[0].appendRow( new QStandardItem("WTS_Bit_3.mov") );
+
+    models[1].setColumnCount( 1 );
+    models[1].appendRow( new QStandardItem("WTS_Bit_1.mov") );
+    models[1].appendRow( new QStandardItem("WTS_Bit_1.mov") );
+    models[1].appendRow( new QStandardItem("WTS_Bit_2.mov") );
+
+    models[2].setColumnCount( 1 );
+    models[2].appendRow( new QStandardItem("Rhythm") );
+    models[2].appendRow( new QStandardItem("Pitch") );
+    models[2].appendRow( new QStandardItem("Surprises") );
+
+    models[3].setColumnCount( 1 );
+    models[3].appendRow( new QStandardItem("Maak je eigen.pdf") );
+    models[3].appendRow( new QStandardItem("Jaques explains.mov") );
+    models[3].appendRow( new QStandardItem("Quick start.pdf") );
+
+    SET_MODEL("library", &models[0]);
+    SET_MODEL("projects", &models[1]);
+    SET_MODEL("study_material", &models[2]);
+    SET_MODEL("get_started", &models[3]);
+
+    start_page->connect_signals();
+
+#undef SET_MODEL
+}
+
 int main(int argc, char * argv[])
 {
     QApplication app(argc, argv);
@@ -14,6 +53,8 @@ int main(int argc, char * argv[])
     QObject::connect(start_page,SIGNAL(import_video(QString)),stub,SLOT(unimplemented()));
     QObject::connect(start_page,SIGNAL(create_new_project(QString,QString)),stub,SLOT(unimplemented()));
     QObject::connect(start_page,SIGNAL(open_file(QString)),stub,SLOT(unimplemented()));
+
+    init_models(start_page);
 
     main_win.show();
     return app.exec();

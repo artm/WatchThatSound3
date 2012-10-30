@@ -9,7 +9,7 @@ class StartPage : public QWidget
 public:
     explicit StartPage(QWidget *parent = 0);
 
-    void connectSignals();
+    void connect_signals();
     QString selected_filename(const QString& area_name);
 
 signals:

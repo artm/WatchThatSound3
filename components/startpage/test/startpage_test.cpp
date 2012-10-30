@@ -38,7 +38,7 @@ private slots:
 
 #define SET_MODEL( area_name, model ) \
     do { \
-    QTreeView* area = start_page->findChild<QTreeView*>(area_name); \
+    QAbstractItemView* area = start_page->findChild<QAbstractItemView*>(area_name); \
     if (area) area->setModel( model ); \
     } while(false)
 
@@ -47,7 +47,7 @@ private slots:
         SET_MODEL("study_material", &study_material_items);
         SET_MODEL("get_started", &get_started_items);
 
-        start_page->connectSignals();
+        start_page->connect_signals();
 
 #undef SET_MODEL
     }
@@ -109,7 +109,7 @@ private slots:
     void activate_open_buttons_on_selection() {
 #define TEST_ACTIVATION( area_name, button_name ) \
     do { \
-        QTreeView * area = start_page->findChild<QTreeView*>( #area_name ); \
+        QAbstractItemView * area = start_page->findChild<QAbstractItemView*>( #area_name ); \
         QPushButton * button = area->parent()->findChild<QPushButton*>( button_name ); \
         QVERIFY( ! button->isEnabled() ); \
         area->setCurrentIndex( area_name ## _items.index(0,0) ); \
@@ -128,7 +128,7 @@ private slots:
 
     void new_project_opens_a_dialog()
     {
-        QTreeView * area = start_page->findChild<QTreeView*>( "library" );
+        QAbstractItemView * area = start_page->findChild<QAbstractItemView*>( "library" );
         area->setCurrentIndex( library_items.index(0,0) );
         QPushButton * button = area->parent()->findChild<QPushButton*>( "new_project" );
         DialogSpecHelper helper(false);
@@ -157,7 +157,7 @@ private slots:
     void creating_a_project()
     {
         // the same given as above...
-        QTreeView * area = start_page->findChild<QTreeView*>( "library" );
+        QAbstractItemView * area = start_page->findChild<QAbstractItemView*>( "library" );
         QModelIndex index_00 = library_items.index(0,0);
         area->setCurrentIndex( index_00 );
         QPushButton * button = area->parent()->findChild<QPushButton*>( "new_project" );
@@ -184,7 +184,7 @@ private slots:
         QFETCH( QString, area_name );
         QFETCH( QString, button_name );
 
-        QTreeView * area = start_page->findChild<QTreeView*>( area_name );
+        QAbstractItemView * area = start_page->findChild<QAbstractItemView*>( area_name );
         QAbstractItemModel * model = area->model();
         for(int row = 0; row < area->model()->rowCount(); ++row) {
             QModelIndex the_index = model->index(row,0);
@@ -234,7 +234,7 @@ private slots:
         QFETCH(int, row_num);
         QFETCH(QString, file_name);
 
-        QTreeView * area = start_page->findChild<QTreeView*>( area_name );
+        QAbstractItemView * area = start_page->findChild<QAbstractItemView*>( area_name );
         area->setCurrentIndex( (row_num >= 0)
                                ? area->model()->index(row_num, 0)
                                : QModelIndex() );

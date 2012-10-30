@@ -15,11 +15,11 @@ StartPage::StartPage(QWidget *parent) :
     QMetaObject::connectSlotsByName( this );
 }
 
-void StartPage::connectSignals()
+void StartPage::connect_signals()
 {
 #define CONNECT_CURRENT_CHANGED( area_name ) \
     do { \
-    QTreeView * area = findChild<QTreeView*>( #area_name ); \
+    QAbstractItemView * area = findChild<QAbstractItemView*>( #area_name ); \
     Q_ASSERT(area); \
     QItemSelectionModel * sel_model = area->selectionModel(); \
     connect( sel_model, \
@@ -94,7 +94,7 @@ void StartPage::on_open_get_started_clicked()
 
 QString StartPage::selected_filename(const QString& area_name)
 {
-    QTreeView * area = findChild<QTreeView*>( area_name );
+    QAbstractItemView * area = findChild<QAbstractItemView*>( area_name );
     Q_ASSERT( area );
     return area->model()->data( area->currentIndex() ).toString();
 }
