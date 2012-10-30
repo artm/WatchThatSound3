@@ -55,8 +55,8 @@ leave room for the Qt 4 target page.
 
     <files>
         <file source="component.pro" target="%ComponentName:l%/%ComponentName:l%.pro" openeditor="false"/>
-        <file source="lib.pro" target="%ComponentName:l%/lib/lib.pro" openeditor="false"/>
-        <file source="test.pro" target="%ComponentName:l%/test/test.pro" openeditor="false"/>
+        <file source="lib.pro" target="%ComponentName:l%/lib/lib%ComponentName:l%.pro" openeditor="false"/>
+        <file source="test.pro" target="%ComponentName:l%/test/%ComponentName:l%_test.pro" openeditor="false"/>
         <file source="test_template.cpp" target="%ComponentName:l%/test/%ComponentName:l%_test.cpp" openeditor="false"/>
         <!-- if requested - also create the initial class -->
     </files>
