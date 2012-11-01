@@ -18,10 +18,11 @@ signals:
     void import_video(QString file_name);
 
 public slots:
-    void handle_library_currentChanged(const QModelIndex& ,const QModelIndex& );
-    void handle_projects_currentChanged(const QModelIndex& ,const QModelIndex& );
-    void handle_study_material_currentChanged(const QModelIndex& ,const QModelIndex& );
-    void handle_get_started_currentChanged(const QModelIndex& ,const QModelIndex& );
+    void handle_library_selectionChanged(const QItemSelection& ,const QItemSelection& );
+    void handle_projects_selectionChanged(const QItemSelection& ,const QItemSelection& );
+    void handle_study_material_selectionChanged(const QItemSelection& ,const QItemSelection& );
+    void handle_get_started_selectionChanged(const QItemSelection& ,const QItemSelection& );
+    void handle_focusChanged(QWidget * old, QWidget * now);
 
     // auto-connected
     void on_new_project_clicked();

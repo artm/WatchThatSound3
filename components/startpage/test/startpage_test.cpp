@@ -112,9 +112,9 @@ private slots:
         QAbstractItemView * area = start_page->findChild<QAbstractItemView*>( #area_name ); \
         QPushButton * button = area->parent()->findChild<QPushButton*>( button_name ); \
         QVERIFY( ! button->isEnabled() ); \
-        area->setCurrentIndex( area_name ## _items.index(0,0) ); \
+        area->selectionModel()->select( area_name ## _items.index(0,0), QItemSelectionModel::Select ); \
         QVERIFY( button->isEnabled() ); \
-        area->setCurrentIndex( QModelIndex() ); \
+        area->clearSelection(); \
         QVERIFY( ! button->isEnabled() ); \
     } while(false)
 
@@ -129,7 +129,7 @@ private slots:
     void new_project_opens_a_dialog()
     {
         QAbstractItemView * area = start_page->findChild<QAbstractItemView*>( "library" );
-        area->setCurrentIndex( library_items.index(0,0) );
+        area->selectionModel()->select( library_items.index(0,0), QItemSelectionModel::Select );
         QPushButton * button = area->parent()->findChild<QPushButton*>( "new_project" );
         DialogSpecHelper helper(false);
         connect(&helper, SIGNAL(run_injected_code(QWidget*)), SLOT( verify_new_project_dialog(QWidget*)));
@@ -159,7 +159,7 @@ private slots:
         // the same given as above...
         QAbstractItemView * area = start_page->findChild<QAbstractItemView*>( "library" );
         QModelIndex index_00 = library_items.index(0,0);
-        area->setCurrentIndex( index_00 );
+        area->selectionModel()->select( index_00, QItemSelectionModel::Select );
         QPushButton * button = area->parent()->findChild<QPushButton*>( "new_project" );
         DialogSpecHelper helper(true);
         connect(&helper,SIGNAL(run_injected_code(QWidget*)), SLOT(fill_in_project_name(QWidget*)));
@@ -188,7 +188,7 @@ private slots:
         QAbstractItemModel * model = area->model();
         for(int row = 0; row < area->model()->rowCount(); ++row) {
             QModelIndex the_index = model->index(row,0);
-            area->setCurrentIndex( the_index );
+            area->selectionModel()->setCurrentIndex( the_index, QItemSelectionModel::Select );
             QPushButton * button = area->parent()->findChild<QPushButton*>( button_name );
             // this will fire after the modal dialog is up
             QSignalSpy spy(start_page, SIGNAL(open_file(QString)));
@@ -197,6 +197,44 @@ private slots:
             QList<QVariant> arguments = spy.takeFirst();
             QCOMPARE(arguments.at(0), model->data( the_index ) );
         }
+    }
+
+    void deselect_on_loosing_focus_data()
+    {
+        QTest::addColumn<QString>("area_name");
+        QTest::addColumn<QString>("next_area_name");
+        QTest::addColumn<QString>("button_name");
+
+        QTest::newRow("library") << "library" << "projects" << "new_project";
+        QTest::newRow("projects") << "projects" << "library" << "continue_project";
+        QTest::newRow("study_material") << "study_material" << "get_started" << "open_study_material";
+        QTest::newRow("get_started") << "get_started" << "study_material" << "open_get_started";
+    }
+
+    void deselect_on_loosing_focus()
+    {
+        QFETCH( QString, area_name );
+        QFETCH( QString, next_area_name );
+        QFETCH( QString, button_name );
+
+        QAbstractItemView * area = start_page->findChild<QAbstractItemView*>( area_name );
+        QAbstractItemView * next_area = start_page->findChild<QAbstractItemView*>( next_area_name );
+        QWidget * button = start_page->findChild<QWidget*>( button_name );
+
+        Q_ASSERT(area);
+        Q_ASSERT(next_area);
+        Q_ASSERT(button);
+
+        // - Given an item is selected in an area
+        area->selectionModel()->select( area->model()->index(0,0), QItemSelectionModel::Select );
+        area->setFocus(Qt::MouseFocusReason);
+        // - When I select an item in a different area
+        next_area->selectionModel()->select( next_area->model()->index(0,0), QItemSelectionModel::Select );
+        next_area->setFocus(Qt::MouseFocusReason);
+        // - Then originally selected item is deselected
+        QVERIFY( area->selectionModel()->selectedRows().count() == 0 );
+        // - And corresponding "open" button becomes inactive
+        QVERIFY( ! button->isEnabled() );
     }
 
     // unit tests
@@ -235,9 +273,10 @@ private slots:
         QFETCH(QString, file_name);
 
         QAbstractItemView * area = start_page->findChild<QAbstractItemView*>( area_name );
-        area->setCurrentIndex( (row_num >= 0)
-                               ? area->model()->index(row_num, 0)
-                               : QModelIndex() );
+        if (row_num >= 0)
+            area->selectionModel()->setCurrentIndex( area->model()->index(row_num, 0), QItemSelectionModel::Select );
+        else
+            area->clearSelection();
         QCOMPARE( start_page->selected_filename( area_name ) , file_name );
     }
 

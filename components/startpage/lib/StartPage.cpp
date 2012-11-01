@@ -17,50 +17,52 @@ StartPage::StartPage(QWidget *parent) :
 
 void StartPage::connect_signals()
 {
-#define CONNECT_CURRENT_CHANGED( area_name ) \
+#define CONNECT_SELECTION_CHANGED( area_name ) \
     do { \
     QAbstractItemView * area = findChild<QAbstractItemView*>( #area_name ); \
     Q_ASSERT(area); \
     QItemSelectionModel * sel_model = area->selectionModel(); \
     connect( sel_model, \
-             SIGNAL( currentChanged(QModelIndex,QModelIndex) ), \
-               SLOT( handle_ ## area_name ## _currentChanged(QModelIndex,QModelIndex) )); \
+             SIGNAL( selectionChanged(QItemSelection,QItemSelection) ), \
+               SLOT( handle_ ## area_name ## _selectionChanged(QItemSelection, QItemSelection) )); \
     } while(false)
 
-    CONNECT_CURRENT_CHANGED( library );
-    CONNECT_CURRENT_CHANGED( projects );
-    CONNECT_CURRENT_CHANGED( study_material );
-    CONNECT_CURRENT_CHANGED( get_started );
+    CONNECT_SELECTION_CHANGED( library );
+    CONNECT_SELECTION_CHANGED( projects );
+    CONNECT_SELECTION_CHANGED( study_material );
+    CONNECT_SELECTION_CHANGED( get_started );
 
-#undef CONNECT_CURRENT_CHANGED
+#undef CONNECT_SELECTION_CHANGED
+
+    connect(qApp, SIGNAL(focusChanged(QWidget*,QWidget*)), SLOT(handle_focusChanged(QWidget*,QWidget*)));
 }
 
-void StartPage::handle_library_currentChanged(const QModelIndex& current,const QModelIndex&)
+void StartPage::handle_library_selectionChanged(const QItemSelection& current,const QItemSelection&)
 {
     QWidget * button = findChild<QWidget *>("new_project");
     Q_ASSERT(button);
-    button->setEnabled( current.isValid() );
+    button->setEnabled( current.count() > 0 );
 }
 
-void StartPage::handle_projects_currentChanged(const QModelIndex& current,const QModelIndex&)
+void StartPage::handle_projects_selectionChanged(const QItemSelection& current,const QItemSelection&)
 {
     QWidget * button = findChild<QWidget *>("continue_project");
     Q_ASSERT(button);
-    button->setEnabled( current.isValid() );
+    button->setEnabled( current.count() > 0 );
 }
 
-void StartPage::handle_study_material_currentChanged(const QModelIndex& current,const QModelIndex&)
+void StartPage::handle_study_material_selectionChanged(const QItemSelection& current,const QItemSelection&)
 {
     QWidget * button = findChild<QWidget *>("open_study_material");
     Q_ASSERT(button);
-    button->setEnabled( current.isValid() );
+    button->setEnabled( current.count() > 0 );
 }
 
-void StartPage::handle_get_started_currentChanged(const QModelIndex& current,const QModelIndex&)
+void StartPage::handle_get_started_selectionChanged(const QItemSelection& current,const QItemSelection&)
 {
     QWidget * button = findChild<QWidget *>("open_get_started");
     Q_ASSERT(button);
-    button->setEnabled( current.isValid() );
+    button->setEnabled( current.count() > 0 );
 }
 
 void StartPage::on_new_project_clicked()
@@ -108,4 +110,14 @@ void StartPage::on_add_video_clicked()
                 "",
                 "Video Files (*.mov *.avi)");
     emit import_video(file_name);
+}
+
+void StartPage::handle_focusChanged(QWidget * old, QWidget * now)
+{
+    QAbstractItemView * old_area = qobject_cast<QAbstractItemView *>(old);
+    if ( old_area && isAncestorOf(old_area) && isAncestorOf(now) && !old->parentWidget()->isAncestorOf(now) ) {
+        QModelIndex none;
+        Q_ASSERT( !none.isValid() );
+        old_area->setCurrentIndex( none );
+    }
 }
