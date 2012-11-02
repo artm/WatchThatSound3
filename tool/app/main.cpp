@@ -13,14 +13,14 @@ void init_models(StartPage * start_page)
     QStandardItem * item;
 
     models[0].setColumnCount( 1 );
-    models[0].appendRow( item = new QStandardItem(QIcon(":/icons/bit6.jpg"), "WTS_Bit_1.mov") );
-    models[0].appendRow( item = new QStandardItem(QIcon(":/icons/bit10.jpg"), "WTS_Bit_2.mov") );
-    models[0].appendRow( item = new QStandardItem(QIcon(":/icons/bit6.jpg"), "WTS_Bit_3.mov") );
+    models[0].appendRow( item = new QStandardItem(QIcon(":/icons/bit6.jpg"), "WTS_Bit_1") );
+    models[0].appendRow( item = new QStandardItem(QIcon(":/icons/bit10.jpg"), "WTS_Bit_2") );
+    models[0].appendRow( item = new QStandardItem(QIcon(":/icons/bit6.jpg"), "WTS_Bit_3") );
 
     models[1].setColumnCount( 1 );
-    models[1].appendRow( new QStandardItem(QIcon(":/icons/bit10.jpg"), "WTS_Bit_1.mov") );
-    models[1].appendRow( new QStandardItem(QIcon(":/icons/bit6.jpg"), "WTS_Bit_1.mov") );
-    models[1].appendRow( new QStandardItem(QIcon(":/icons/bit6.jpg"), "WTS_Bit_2.mov") );
+    models[1].appendRow( new QStandardItem(QIcon(":/icons/bit10.jpg"), "WTS_Bit_1") );
+    models[1].appendRow( new QStandardItem(QIcon(":/icons/bit6.jpg"), "WTS_Bit_1") );
+    models[1].appendRow( new QStandardItem(QIcon(":/icons/bit6.jpg"), "WTS_Bit_2") );
 
     models[2].setColumnCount( 1 );
     models[2].appendRow( new QStandardItem(QIcon(":/icons/bit6.jpg"), "Rhythm") );
@@ -28,9 +28,9 @@ void init_models(StartPage * start_page)
     models[2].appendRow( new QStandardItem(QIcon(":/icons/bit10.jpg"), "Surprises") );
 
     models[3].setColumnCount( 1 );
-    models[3].appendRow( new QStandardItem(QIcon(":/icons/bit10.jpg"), "Maak je eigen.pdf") );
-    models[3].appendRow( new QStandardItem(QIcon(":/icons/bit10.jpg"), "Jaques explains.mov") );
-    models[3].appendRow( new QStandardItem(QIcon(":/icons/bit6.jpg"), "Quick start.pdf") );
+    models[3].appendRow( new QStandardItem(QIcon(":/icons/bit10.jpg"), "Maak je eigen") );
+    models[3].appendRow( new QStandardItem(QIcon(":/icons/bit10.jpg"), "Jaques explains") );
+    models[3].appendRow( new QStandardItem(QIcon(":/icons/bit6.jpg"), "Quick start") );
 
     SET_MODEL("library", &models[0]);
     SET_MODEL("projects", &models[1]);
