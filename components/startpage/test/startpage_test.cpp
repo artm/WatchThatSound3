@@ -74,24 +74,24 @@ private slots:
         QVERIFY( find_sibling_with_text<QPushButton*>(area("Study material"), "Open" ) );
     }
 
+    void activate_open_buttons_on_selection_data() {
+        QTest::addColumn<QString>("title");
+        QTest::addColumn<QString>("open_button_title");
+        QTest::newRow("Library") << "Library" << "New Project";
+        QTest::newRow("Library") << "Projects" << "Continue Project";
+        QTest::newRow("Library") << "Get started" << "Open";
+        QTest::newRow("Library") << "Study material" << "Open";
+    }
+
     void activate_open_buttons_on_selection() {
-#define TEST_ACTIVATION( area_name, button_name ) \
-    do { \
-        QAbstractItemView * area = start_page->findChild<QAbstractItemView*>( #area_name ); \
-        QPushButton * button = area->parent()->findChild<QPushButton*>( button_name ); \
-        QVERIFY( ! button->isEnabled() ); \
-        area->selectionModel()->select( area_name ## _items.index(0,0), QItemSelectionModel::Select ); \
-        QVERIFY( button->isEnabled() ); \
-        area->clearSelection(); \
-        QVERIFY( ! button->isEnabled() ); \
-    } while(false)
+        QFETCH(QString, title);
+        QFETCH(QString, open_button_title);
 
-        TEST_ACTIVATION( library, "new_project" );
-        TEST_ACTIVATION( projects, "continue_project" );
-        TEST_ACTIVATION( study_material, "open_study_material" );
-        TEST_ACTIVATION( get_started, "open_get_started" );
-
-#undef TEST_ACTIVATION
+        QPushButton * button = find_sibling_with_text<QPushButton *>( area(title), open_button_title );
+        deselect(title);
+        QVERIFY( ! button->isEnabled() );
+        select(title);
+        QVERIFY( button->isEnabled() );
     }
 
     void new_project_opens_a_dialog()
@@ -209,7 +209,7 @@ private slots:
     {
         QSignalSpy spy(start_page, SIGNAL(open_project(QString)));
 
-        select("projects");
+        select("Projects");
         press("Continue Project");
 
         QCOMPARE( spy.count(), 1);
@@ -320,10 +320,14 @@ private:
 
     void select(const QString& area_name, int index = 0)
     {
-        QAbstractItemView * area = start_page->findChild<QAbstractItemView*>( area_name );
-        QVERIFY( area );
-        area->setCurrentIndex( area->model()->index(index,0) );
+        QAbstractItemView * a = area( area_name );
+        QVERIFY( a );
+        a->setCurrentIndex( index >= 0 ? a->model()->index(index,0) : QModelIndex() );
+    }
 
+    void deselect(const QString& area_name)
+    {
+        select(area_name, -1);
     }
 
     void press(const QString& button_text)
