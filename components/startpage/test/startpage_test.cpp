@@ -67,21 +67,11 @@ private slots:
 
     void buttons_under_start_page_areas()
     {
-#define TEST_BUTTON( area_name, button_name, button_text ) \
-    do { \
-    QWidget * area = start_page->findChild<QWidget*>( area_name ); \
-    QPushButton * button = area->parent()->findChild<QPushButton*>( button_name ); \
-    QVERIFY( button ); \
-    QVERIFY( button->text().contains( button_text ) ); \
-    } while(false)
-
-        TEST_BUTTON( "library", "add_video", "Add an Existing Video" );
-        TEST_BUTTON( "library", "new_project", "New Project" );
-        TEST_BUTTON( "projects", "continue_project", "Continue Project" );
-        TEST_BUTTON( "study_material", "open_study_material", "Open" );
-        TEST_BUTTON( "get_started", "open_get_started", "Open" );
-
-#undef TEST_BUTTON
+        QVERIFY( find_sibling_with_text<QPushButton*>(area("Library"), "Add an Existing Video" ) );
+        QVERIFY( find_sibling_with_text<QPushButton*>(area("Library"), "New Project" ) );
+        QVERIFY( find_sibling_with_text<QPushButton*>(area("Projects"), "Continue Project" ) );
+        QVERIFY( find_sibling_with_text<QPushButton*>(area("Get started"), "Open" ) );
+        QVERIFY( find_sibling_with_text<QPushButton*>(area("Study material"), "Open" ) );
     }
 
     void activate_open_buttons_on_selection() {
@@ -306,6 +296,7 @@ private:
     template<typename WidgetType>
     WidgetType find_widget_with_text( QWidget * container, const QString& text )
     {
+        Q_ASSERT(container);
         foreach(WidgetType child_widget, container->findChildren<WidgetType>()) {
             if ( child_widget->objectName() == text || child_widget->text().contains(text) )
                 return child_widget;
@@ -318,7 +309,13 @@ private:
     {
         QLabel * label = find_widget_with_text<QLabel*>(container, label_text);
         Q_ASSERT( label );
-        return label->parent()->findChildren<WidgetType>();
+        return label->parentWidget()->findChildren<WidgetType>();
+    }
+
+    template<typename WidgetType>
+    WidgetType find_sibling_with_text( QWidget * widget, const QString& sibling_text )
+    {
+        return find_widget_with_text<WidgetType>(widget->parentWidget(), sibling_text);
     }
 
     void select(const QString& area_name, int index = 0)
