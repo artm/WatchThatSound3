@@ -59,32 +59,10 @@ private slots:
 
     void contains_item_collections()
     {
-        QWidget * area;
-
-#define TEST_LABEL(where, name,label_text) \
-    do { \
-    QVERIFY( where->findChild<QLabel*>(name) ); \
-    QVERIFY( where->findChild<QLabel*>(name)->isVisible() ); \
-    QVERIFY( where->findChild<QLabel*>(name)->text().contains(label_text) ); \
-    } while(false)
-
-#define TEST_AREA(where, name, label_text) \
-    do { \
-    area = start_page->findChild<QWidget*>( name ); \
-    QString label_name = QString(name) + "_label"; \
-    QVERIFY( area ); \
-    QVERIFY( area->isVisible() ); \
-    TEST_LABEL( area->parent(), label_name, label_text ); \
-    } while(false)
-
-
-        TEST_AREA( start_page, "library", "Library" );
-        TEST_AREA( start_page, "projects", "Projects" );
-        TEST_AREA( start_page, "study_material", "Study material" );
-        TEST_AREA( start_page, "get_started", "Get started" );
-
-#undef TEST_AREA
-#undef TEST_LABEL
+        QVERIFY( area("Library") );
+        QVERIFY( area("Projects") );
+        QVERIFY( area("Study material") );
+        QVERIFY( area("Get started") );
     }
 
     void buttons_under_start_page_areas()
@@ -326,13 +304,21 @@ public slots:
 private:
     // FIXME make this a shared utility
     template<typename WidgetType>
-    WidgetType find_widget_with_text( QWidget * widget, const QString& text )
+    WidgetType find_widget_with_text( QWidget * container, const QString& text )
     {
-        foreach(WidgetType child_widget, widget->findChildren<WidgetType>()) {
+        foreach(WidgetType child_widget, container->findChildren<WidgetType>()) {
             if ( child_widget->objectName() == text || child_widget->text().contains(text) )
                 return child_widget;
         }
         return NULL;
+    }
+
+    template<typename WidgetType>
+    QList<WidgetType> find_label_siblings( QWidget * container, const QString& label_text )
+    {
+        QLabel * label = find_widget_with_text<QLabel*>(container, label_text);
+        Q_ASSERT( label );
+        return label->parent()->findChildren<WidgetType>();
     }
 
     void select(const QString& area_name, int index = 0)
@@ -348,6 +334,13 @@ private:
         QAbstractButton * button = find_widget_with_text<QAbstractButton*>( start_page, button_text );
         QVERIFY(button);
         button->click();
+    }
+
+    QAbstractItemView * area( const QString& title )
+    {
+        QList<QAbstractItemView *> candidates = find_label_siblings<QAbstractItemView *>(start_page, title);
+        Q_ASSERT( candidates.count() == 1 );
+        return candidates[0];
     }
 };
 
