@@ -237,6 +237,17 @@ private slots:
         QVERIFY( ! button->isEnabled() );
     }
 
+    void continue_project_emits_open_project()
+    {
+        QSignalSpy spy(start_page, SIGNAL(open_project(QString)));
+
+        select("projects");
+        press("Continue Project");
+
+        QCOMPARE( spy.count(), 1);
+        QCOMPARE( spy.takeFirst().at(0).toString() , start_page->selected_filename("projects") );
+    }
+
     // unit tests
     void test_selected_filename_data()
     {
@@ -273,10 +284,7 @@ private slots:
         QFETCH(QString, file_name);
 
         QAbstractItemView * area = start_page->findChild<QAbstractItemView*>( area_name );
-        if (row_num >= 0)
-            area->selectionModel()->setCurrentIndex( area->model()->index(row_num, 0), QItemSelectionModel::Select );
-        else
-            area->clearSelection();
+        area->setCurrentIndex( (row_num >= 0) ? area->model()->index(row_num, 0) : QModelIndex() );
         QCOMPARE( start_page->selected_filename( area_name ) , file_name );
     }
 
@@ -321,10 +329,25 @@ private:
     WidgetType find_widget_with_text( QWidget * widget, const QString& text )
     {
         foreach(WidgetType child_widget, widget->findChildren<WidgetType>()) {
-            if ( child_widget->text().contains(text) )
+            if ( child_widget->objectName() == text || child_widget->text().contains(text) )
                 return child_widget;
         }
         return NULL;
+    }
+
+    void select(const QString& area_name, int index = 0)
+    {
+        QAbstractItemView * area = start_page->findChild<QAbstractItemView*>( area_name );
+        QVERIFY( area );
+        area->setCurrentIndex( area->model()->index(index,0) );
+
+    }
+
+    void press(const QString& button_text)
+    {
+        QAbstractButton * button = find_widget_with_text<QAbstractButton*>( start_page, button_text );
+        QVERIFY(button);
+        button->click();
     }
 };
 

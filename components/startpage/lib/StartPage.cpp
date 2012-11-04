@@ -84,6 +84,11 @@ void StartPage::on_new_project_clicked()
     }
 }
 
+void StartPage::on_continue_project_clicked()
+{
+    emit open_project( selected_filename("projects") );
+}
+
 void StartPage::on_open_study_material_clicked()
 {
     emit open_file( selected_filename("study_material") );
