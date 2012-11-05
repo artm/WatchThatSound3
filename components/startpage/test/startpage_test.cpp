@@ -9,6 +9,23 @@ class StartPageTest: public QObject
     StartPage * start_page;
     QStandardItemModel library_items, projects_items, study_material_items, get_started_items;
 
+
+    void open_buttons_data()
+    {
+        QTest::addColumn<QString>("title");
+        QTest::addColumn<QString>("open_button_title");
+        QTest::newRow("New Project") << "Library" << "New Project";
+        QTest::newRow("Continue Project") << "Projects" << "Continue Project";
+        QTest::newRow("Get started / Open") << "Get started" << "Open";
+        QTest::newRow("Study material / Open") << "Study material" << "Open";
+    }
+
+    void all_buttons_data()
+    {
+        open_buttons_data();
+        QTest::newRow("Add an Existing Video") << "Library" << "Add an Existing Video";
+    }
+
 private slots:
     void initTestCase() {
         // given start page is displayed...
@@ -65,22 +82,20 @@ private slots:
         QVERIFY( area("Get started") );
     }
 
+    void buttons_under_start_page_areas_data()
+    {
+        all_buttons_data();
+    }
+
     void buttons_under_start_page_areas()
     {
-        QVERIFY( find_sibling_with_text<QPushButton*>(area("Library"), "Add an Existing Video" ) );
-        QVERIFY( find_sibling_with_text<QPushButton*>(area("Library"), "New Project" ) );
-        QVERIFY( find_sibling_with_text<QPushButton*>(area("Projects"), "Continue Project" ) );
-        QVERIFY( find_sibling_with_text<QPushButton*>(area("Get started"), "Open" ) );
-        QVERIFY( find_sibling_with_text<QPushButton*>(area("Study material"), "Open" ) );
+        QFETCH(QString, title);
+        QFETCH(QString, open_button_title);
+        QVERIFY( find_sibling_with_text<QPushButton*>(area(title), open_button_title ) );
     }
 
     void activate_open_buttons_on_selection_data() {
-        QTest::addColumn<QString>("title");
-        QTest::addColumn<QString>("open_button_title");
-        QTest::newRow("Library") << "Library" << "New Project";
-        QTest::newRow("Library") << "Projects" << "Continue Project";
-        QTest::newRow("Library") << "Get started" << "Open";
-        QTest::newRow("Library") << "Study material" << "Open";
+        open_buttons_data();
     }
 
     void activate_open_buttons_on_selection() {
