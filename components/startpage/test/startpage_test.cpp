@@ -111,12 +111,12 @@ private slots:
 
     void new_project_opens_a_dialog()
     {
-        QAbstractItemView * area = start_page->findChild<QAbstractItemView*>( "library" );
-        area->selectionModel()->select( library_items.index(0,0), QItemSelectionModel::Select );
-        QPushButton * button = area->parent()->findChild<QPushButton*>( "new_project" );
         DialogSpecHelper helper(false);
         connect(&helper, SIGNAL(run_injected_code(QWidget*)), SLOT( verify_new_project_dialog(QWidget*)));
-        button->click();
+
+        select("Library");
+        press("New Project");
+
         QVERIFY( helper.injected_method_succeded() );
     }
 
