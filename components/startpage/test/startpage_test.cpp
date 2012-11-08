@@ -120,21 +120,16 @@ private slots:
         QVERIFY( helper.injected_method_succeded() );
     }
 
-    void import_video()
+    void clicking_add_opens_a_file_dialog()
     {
-        QPushButton * add_button = find_widget_with_text<QPushButton*>(start_page, "Add an Existing Video");
-        QVERIFY( add_button );
-
         QSignalSpy spy(start_page, SIGNAL(import_video(QString)));
-
-        // test if the file dialog shows up
         DialogSpecHelper helper(true);
         connect(&helper, SIGNAL(run_injected_code(QWidget*)), SLOT(test_add_video_dialog(QWidget*)));
-        add_button->click();
-        QVERIFY( helper.injected_method_succeded() );
+
+        press("Add an Existing Video");
+
         QCOMPARE( spy.count(), 1 );
-        QList<QVariant> arguments = spy.takeFirst();
-        QVERIFY( arguments.at(0).toString().endsWith("fake.mov") );
+        QVERIFY( spy.takeFirst().at(0).toString().endsWith("fake.mov") );
     }
 
     void creating_a_project()
