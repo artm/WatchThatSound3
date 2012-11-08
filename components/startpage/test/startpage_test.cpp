@@ -13,7 +13,7 @@ class StartPageTest: public QObject
     void open_buttons_data()
     {
         QTest::addColumn<QString>("title");
-        QTest::addColumn<QString>("open_button_title");
+        QTest::addColumn<QString>("button_title");
         QTest::newRow("New Project") << "Library" << "New Project";
         QTest::newRow("Continue Project") << "Projects" << "Continue Project";
         QTest::newRow("Get started / Open") << "Get started" << "Open";
@@ -90,8 +90,8 @@ private slots:
     void buttons_under_start_page_areas()
     {
         QFETCH(QString, title);
-        QFETCH(QString, open_button_title);
-        QVERIFY( find_sibling_with_text<QPushButton*>(area(title), open_button_title ) );
+        QFETCH(QString, button_title);
+        QVERIFY( find_sibling_with_text<QPushButton*>(area(title), button_title ) );
     }
 
     void activate_open_buttons_on_selection_data() {
@@ -100,9 +100,9 @@ private slots:
 
     void activate_open_buttons_on_selection() {
         QFETCH(QString, title);
-        QFETCH(QString, open_button_title);
+        QFETCH(QString, button_title);
 
-        QPushButton * button = find_sibling_with_text<QPushButton *>( area(title), open_button_title );
+        QPushButton * button = find_sibling_with_text<QPushButton *>( area(title), button_title );
         deselect(title);
         QVERIFY( ! button->isEnabled() );
         select(title);
