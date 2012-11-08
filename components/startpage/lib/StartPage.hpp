@@ -11,6 +11,7 @@ public:
 
     void connect_signals();
     QString selected_filename(const QString& area_name);
+    QString selected_filename(QAbstractItemView * area);
 
 signals:
     void create_new_project(QString name, QString original_video);

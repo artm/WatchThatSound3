@@ -7,8 +7,7 @@ class StartPageTest: public QObject
 {
     Q_OBJECT
     StartPage * start_page;
-    QStandardItemModel library_items, projects_items, study_material_items, get_started_items;
-
+    QMap<QString, QList<QString> > items;
 
     void open_buttons_data()
     {
@@ -27,46 +26,23 @@ class StartPageTest: public QObject
     }
 
 private slots:
-    void initTestCase() {
-        // given start page is displayed...
+    void initTestCase()
+    {
         start_page = new StartPage();
-        start_page->show();
 
-        // some items for every area
-        library_items.setColumnCount( 1 );
-        library_items.appendRow( new QStandardItem("WTS_Bit_1.mov") );
-        library_items.appendRow( new QStandardItem("WTS_Bit_2.mov") );
-        library_items.appendRow( new QStandardItem("WTS_Bit_3.mov") );
+        items["Library"] << "WTS_Bit_1.mov" << "WTS_Bit_2.mov" << "WTS_Bit_3.mov";
+        items["Projects"] << "WTS_Bit_1.mov" << "WTS_Bit_1.mov" << "WTS_Bit_2.mov";
+        items["Study material"] << "Rhythm" << "Pitch" << "Surprises";
+        items["Get started"] << "Maak je eigen.pdf" << "Jaques explains.mov" << "Quick start.pdf";
 
-        projects_items.setColumnCount( 1 );
-        projects_items.appendRow( new QStandardItem("WTS_Bit_1.mov") );
-        projects_items.appendRow( new QStandardItem("WTS_Bit_1.mov") );
-        projects_items.appendRow( new QStandardItem("WTS_Bit_2.mov") );
-
-        study_material_items.setColumnCount( 1 );
-        study_material_items.appendRow( new QStandardItem("Rhythm") );
-        study_material_items.appendRow( new QStandardItem("Pitch") );
-        study_material_items.appendRow( new QStandardItem("Surprises") );
-
-        get_started_items.setColumnCount( 1 );
-        get_started_items.appendRow( new QStandardItem("Maak je eigen.pdf") );
-        get_started_items.appendRow( new QStandardItem("Jaques explains.mov") );
-        get_started_items.appendRow( new QStandardItem("Quick start.pdf") );
-
-#define SET_MODEL( area_name, model ) \
-    do { \
-    QAbstractItemView* area = start_page->findChild<QAbstractItemView*>(area_name); \
-    if (area) area->setModel( model ); \
-    } while(false)
-
-        SET_MODEL("library", &library_items);
-        SET_MODEL("projects", &projects_items);
-        SET_MODEL("study_material", &study_material_items);
-        SET_MODEL("get_started", &get_started_items);
-
+        foreach(QString area_title, items.keys()) {
+            QStandardItemModel * model = new QStandardItemModel(0,1);
+            foreach(QString file_name, items[area_title])
+                model->appendRow( new QStandardItem(file_name) );
+            area(area_title)->setModel( model );
+        }
         start_page->connect_signals();
-
-#undef SET_MODEL
+        start_page->show();
     }
 
     void cleanupTestCase() {
@@ -169,7 +145,7 @@ private slots:
             press( area_title, "Open" );
 
             QCOMPARE(spy.count(), 1);
-            QCOMPARE(spy.takeFirst().at(0).toString(), start_page->selected_filename( reference_area->objectName() ));
+            QCOMPARE(spy.takeFirst().at(0).toString(), start_page->selected_filename( reference_area ));
         }
     }
 
@@ -219,41 +195,28 @@ private slots:
     // unit tests
     void test_selected_filename_data()
     {
-        QTest::addColumn<QString>("area_name");
+        QTest::addColumn<QString>("area_title");
         QTest::addColumn<int>("row_num");
         QTest::addColumn<QString>("file_name");
 
-        QTest::newRow("none in library")   << "library" << -1 << QString();
-        QTest::newRow("first in library")  << "library" <<  0 << "WTS_Bit_1.mov";
-        QTest::newRow("second in library") << "library" <<  1 << "WTS_Bit_2.mov";
-        QTest::newRow("third in library")  << "library" <<  2 << "WTS_Bit_3.mov";
-
-        QTest::newRow("none in projects")   << "projects" << -1 << QString();
-        QTest::newRow("first in projects")  << "projects" <<  0 << "WTS_Bit_1.mov";
-        QTest::newRow("second in projects") << "projects" <<  1 << "WTS_Bit_1.mov";
-        QTest::newRow("third in projects")  << "projects" <<  2 << "WTS_Bit_2.mov";
-
-        QTest::newRow("none in study_material")   << "study_material" << -1 << QString();
-        QTest::newRow("first in study_material")  << "study_material" <<  0 << "Rhythm";
-        QTest::newRow("second in study_material") << "study_material" <<  1 << "Pitch";
-        QTest::newRow("third in study_material")  << "study_material" <<  2 << "Surprises";
-
-        QTest::newRow("none in get_started")   << "get_started" << -1 << QString();
-        QTest::newRow("first in get_started")  << "get_started" <<  0 << "Maak je eigen.pdf";
-        QTest::newRow("second in get_started") << "get_started" <<  1 << "Jaques explains.mov";
-        QTest::newRow("third in get_started")  << "get_started" <<  2 << "Quick start.pdf";
-
+        foreach( QString area_title, items.keys() ) {
+            QTest::newRow(qPrintable(area_title + " no selection"))   << area_title << -1 << QString();
+            for(int i = 0; i<items[area_title].count(); ++i) {
+                QTest::newRow(qPrintable(area_title + " " + i))  << area_title <<  i << items[area_title][i];
+            }
+        }
     }
 
     void test_selected_filename()
     {
-        QFETCH(QString, area_name);
+        QFETCH(QString, area_title);
         QFETCH(int, row_num);
         QFETCH(QString, file_name);
 
-        QAbstractItemView * area = start_page->findChild<QAbstractItemView*>( area_name );
-        area->setCurrentIndex( (row_num >= 0) ? area->model()->index(row_num, 0) : QModelIndex() );
-        QCOMPARE( start_page->selected_filename( area_name ) , file_name );
+        QAbstractItemView * area_under_test = area(area_title);
+        area_under_test->setCurrentIndex( (row_num >= 0) ? area_under_test->model()->index(row_num, 0) : QModelIndex() );
+        QCOMPARE( start_page->selected_filename( area_under_test ) , file_name );
+        QCOMPARE( start_page->selected_filename( area_under_test->objectName() ) , file_name );
     }
 
 public slots:

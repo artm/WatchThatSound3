@@ -103,6 +103,11 @@ QString StartPage::selected_filename(const QString& area_name)
 {
     QAbstractItemView * area = findChild<QAbstractItemView*>( area_name );
     Q_ASSERT( area );
+    return selected_filename(area);
+}
+
+QString StartPage::selected_filename(QAbstractItemView * area)
+{
     return area->model()->data( area->currentIndex() ).toString();
 }
 
