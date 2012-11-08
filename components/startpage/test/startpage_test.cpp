@@ -145,34 +145,31 @@ private slots:
         QCOMPARE(spy.count(), 1);
         QList<QVariant> args = spy.takeFirst();
         QCOMPARE(args.at(0).toString(), QString("Test Project"));
-        QCOMPARE(args.at(1), start_page->selected_filename("Library") );
+        QCOMPARE(args.at(1).toString(), start_page->selected_filename("library") );
     }
 
     void opens_reference_documents_data()
     {
-        QTest::addColumn<QString>("area_name");
-        QTest::addColumn<QString>("button_name");
-        QTest::newRow("study material") << "study_material" << "open_study_material";
-        QTest::newRow("get started") << "get_started" << "open_get_started";
+        QTest::addColumn<QString>("area_title");
+        QTest::newRow("Study material") << "Study material";
+        QTest::newRow("Get started") << "Get started";
     }
 
     void opens_reference_documents()
     {
-        QFETCH( QString, area_name );
-        QFETCH( QString, button_name );
+        QFETCH( QString, area_title );
 
-        QAbstractItemView * area = start_page->findChild<QAbstractItemView*>( area_name );
-        QAbstractItemModel * model = area->model();
-        for(int row = 0; row < area->model()->rowCount(); ++row) {
-            QModelIndex the_index = model->index(row,0);
-            area->selectionModel()->setCurrentIndex( the_index, QItemSelectionModel::Select );
-            QPushButton * button = area->parent()->findChild<QPushButton*>( button_name );
+        QAbstractItemView * reference_area = area(area_title);
+        QVERIFY(reference_area);
+        for(int row = 0; row < reference_area->model()->rowCount(); ++row) {
             // this will fire after the modal dialog is up
             QSignalSpy spy(start_page, SIGNAL(open_file(QString)));
-            button->click();
+
+            select( area_title, row );
+            press( area_title, "Open" );
+
             QCOMPARE(spy.count(), 1);
-            QList<QVariant> arguments = spy.takeFirst();
-            QCOMPARE(arguments.at(0), model->data( the_index ) );
+            QCOMPARE(spy.takeFirst().at(0).toString(), start_page->selected_filename( reference_area->objectName() ));
         }
     }
 
@@ -342,6 +339,15 @@ private:
     void press(const QString& button_text)
     {
         QAbstractButton * button = find_widget_with_text<QAbstractButton*>( start_page, button_text );
+        QVERIFY(button);
+        button->click();
+    }
+
+    void press(const QString& label_text, const QString& button_text )
+    {
+        QLabel * label = find_widget_with_text<QLabel*>(start_page, label_text);
+        QVERIFY(label);
+        QAbstractButton* button = find_sibling_with_text<QAbstractButton*>( label, button_text );
         QVERIFY(button);
         button->click();
     }
