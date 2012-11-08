@@ -175,40 +175,34 @@ private slots:
 
     void deselect_on_loosing_focus_data()
     {
-        QTest::addColumn<QString>("area_name");
-        QTest::addColumn<QString>("next_area_name");
-        QTest::addColumn<QString>("button_name");
-
-        QTest::newRow("library") << "library" << "projects" << "new_project";
-        QTest::newRow("projects") << "projects" << "library" << "continue_project";
-        QTest::newRow("study_material") << "study_material" << "get_started" << "open_study_material";
-        QTest::newRow("get_started") << "get_started" << "study_material" << "open_get_started";
+        open_buttons_data();
     }
 
     void deselect_on_loosing_focus()
     {
-        QFETCH( QString, area_name );
-        QFETCH( QString, next_area_name );
-        QFETCH( QString, button_name );
+        QFETCH( QString, title );
+        QFETCH( QString, button_title );
 
-        QAbstractItemView * area = start_page->findChild<QAbstractItemView*>( area_name );
-        QAbstractItemView * next_area = start_page->findChild<QAbstractItemView*>( next_area_name );
-        QWidget * button = start_page->findChild<QWidget*>( button_name );
+        QAbstractItemView * first_area = area(title);
+        QAbstractButton * button = find_sibling_with_text<QAbstractButton *>( first_area, button_title );
 
-        Q_ASSERT(area);
-        Q_ASSERT(next_area);
+        Q_ASSERT(first_area);
         Q_ASSERT(button);
 
-        // - Given an item is selected in an area
-        area->selectionModel()->select( area->model()->index(0,0), QItemSelectionModel::Select );
-        area->setFocus(Qt::MouseFocusReason);
-        // - When I select an item in a different area
-        next_area->selectionModel()->select( next_area->model()->index(0,0), QItemSelectionModel::Select );
-        next_area->setFocus(Qt::MouseFocusReason);
-        // - Then originally selected item is deselected
-        QVERIFY( area->selectionModel()->selectedRows().count() == 0 );
-        // - And corresponding "open" button becomes inactive
-        QVERIFY( ! button->isEnabled() );
+        foreach( QAbstractItemView * next_area, start_page->findChildren<QAbstractItemView *>() ) {
+            if (first_area == next_area)
+                continue;
+            // - Given an item is selected in an area
+            first_area->selectionModel()->select( first_area->model()->index(0,0), QItemSelectionModel::Select );
+            first_area->setFocus(Qt::MouseFocusReason);
+            // - When I select an item in a different area
+            next_area->selectionModel()->select( next_area->model()->index(0,0), QItemSelectionModel::Select );
+            next_area->setFocus(Qt::MouseFocusReason);
+            // - Then originally selected item is deselected
+            QVERIFY( first_area->selectionModel()->selectedRows().count() == 0 );
+            // - And corresponding "open" button becomes inactive
+            QVERIFY( ! button->isEnabled() );
+        }
     }
 
     void continue_project_emits_open_project()
