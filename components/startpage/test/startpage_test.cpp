@@ -135,18 +135,17 @@ private slots:
     void creating_a_project()
     {
         // the same given as above...
-        QAbstractItemView * area = start_page->findChild<QAbstractItemView*>( "library" );
-        QModelIndex index_00 = library_items.index(0,0);
-        area->selectionModel()->select( index_00, QItemSelectionModel::Select );
-        QPushButton * button = area->parent()->findChild<QPushButton*>( "new_project" );
         DialogSpecHelper helper(true);
         connect(&helper,SIGNAL(run_injected_code(QWidget*)), SLOT(fill_in_project_name(QWidget*)));
         QSignalSpy spy(start_page, SIGNAL(create_new_project(QString, QString)));
-        button->click();
+
+        select("Library");
+        press("New Project");
+
         QCOMPARE(spy.count(), 1);
-        QList<QVariant> arguments = spy.takeFirst();
-        QCOMPARE(arguments.at(0).toString(), QString("Test Project"));
-        QCOMPARE(arguments.at(1), library_items.data( index_00 ));
+        QList<QVariant> args = spy.takeFirst();
+        QCOMPARE(args.at(0).toString(), QString("Test Project"));
+        QCOMPARE(args.at(1), start_page->selected_filename("Library") );
     }
 
     void opens_reference_documents_data()
