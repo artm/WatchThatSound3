@@ -1,2 +1,2 @@
 TEMPLATE = subdirs
-SUBDIRS = startpage utils
+SUBDIRS = startpage utils customwidgets
