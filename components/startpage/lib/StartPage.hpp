@@ -20,10 +20,7 @@ signals:
     void import_video(QString file_name);
 
 public slots:
-    void handle_library_selectionChanged(const QItemSelection& ,const QItemSelection& );
-    void handle_projects_selectionChanged(const QItemSelection& ,const QItemSelection& );
-    void handle_study_material_selectionChanged(const QItemSelection& ,const QItemSelection& );
-    void handle_get_started_selectionChanged(const QItemSelection& ,const QItemSelection& );
+    void handle_selectionChanged();
     void handle_focusChanged(QWidget * old, QWidget * now);
 
     // auto-connected
@@ -33,6 +30,8 @@ public slots:
     void on_open_get_started_clicked();
     void on_add_video_clicked();
 
+protected:
+    QAbstractItemView * area_of( const QAbstractItemModel * model );
 };
 
 #endif // STARTPAGE_HPP

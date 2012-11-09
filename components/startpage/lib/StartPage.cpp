@@ -17,52 +17,32 @@ StartPage::StartPage(QWidget *parent) :
 
 void StartPage::connect_signals()
 {
-#define CONNECT_SELECTION_CHANGED( area_name ) \
-    do { \
-    QAbstractItemView * area = findChild<QAbstractItemView*>( #area_name ); \
-    Q_ASSERT(area); \
-    QItemSelectionModel * sel_model = area->selectionModel(); \
-    connect( sel_model, \
-             SIGNAL( selectionChanged(QItemSelection,QItemSelection) ), \
-               SLOT( handle_ ## area_name ## _selectionChanged(QItemSelection, QItemSelection) )); \
-    } while(false)
+    QAbstractItemView* area;
 
-    CONNECT_SELECTION_CHANGED( library );
-    CONNECT_SELECTION_CHANGED( projects );
-    CONNECT_SELECTION_CHANGED( study_material );
-    CONNECT_SELECTION_CHANGED( get_started );
+#define SETUP_AREA(area_name, button_name) \
+    area = findChild<QAbstractItemView*>( area_name ); \
+    area->setProperty("open_button_name", button_name); \
+    connect( area->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(handle_selectionChanged()) );
 
-#undef CONNECT_SELECTION_CHANGED
+    SETUP_AREA( "library", "new_project" );
+    SETUP_AREA( "projects", "continue_project" );
+    SETUP_AREA( "study_material", "open_study_material");
+    SETUP_AREA( "get_started", "open_get_started");
+#undef SETUP_AREA
 
     connect(qApp, SIGNAL(focusChanged(QWidget*,QWidget*)), SLOT(handle_focusChanged(QWidget*,QWidget*)));
 }
 
-void StartPage::handle_library_selectionChanged(const QItemSelection& current,const QItemSelection&)
+void StartPage::handle_selectionChanged()
 {
-    QWidget * button = findChild<QWidget *>("new_project");
+    QItemSelectionModel * sel_model = qobject_cast<QItemSelectionModel *>(sender());
+    Q_ASSERT(sel_model);
+    QAbstractItemView * area = area_of(sel_model->model());
+    Q_ASSERT(area);
+    QString button_name = area->property("open_button_name").toString();
+    QAbstractButton * button = findChild<QAbstractButton *>(button_name);
     Q_ASSERT(button);
-    button->setEnabled( current.count() > 0 );
-}
-
-void StartPage::handle_projects_selectionChanged(const QItemSelection& current,const QItemSelection&)
-{
-    QWidget * button = findChild<QWidget *>("continue_project");
-    Q_ASSERT(button);
-    button->setEnabled( current.count() > 0 );
-}
-
-void StartPage::handle_study_material_selectionChanged(const QItemSelection& current,const QItemSelection&)
-{
-    QWidget * button = findChild<QWidget *>("open_study_material");
-    Q_ASSERT(button);
-    button->setEnabled( current.count() > 0 );
-}
-
-void StartPage::handle_get_started_selectionChanged(const QItemSelection& current,const QItemSelection&)
-{
-    QWidget * button = findChild<QWidget *>("open_get_started");
-    Q_ASSERT(button);
-    button->setEnabled( current.count() > 0 );
+    button->setEnabled( area->currentIndex().isValid() );
 }
 
 void StartPage::on_new_project_clicked()
@@ -130,4 +110,13 @@ void StartPage::handle_focusChanged(QWidget * old, QWidget * now)
         Q_ASSERT( !none.isValid() );
         old_area->setCurrentIndex( none );
     }
+}
+
+QAbstractItemView * StartPage::area_of( const QAbstractItemModel * model )
+{
+    foreach( QAbstractItemView * area, findChildren<QAbstractItemView *>() ) {
+        if (area->model() == model)
+            return area;
+    }
+    return NULL;
 }
