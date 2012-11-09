@@ -2,6 +2,8 @@
 #include "utils/Stub"
 #include "customwidgets/SlidingStackedWidget"
 
+#include "TestWtsIntegration.hpp"
+
 QStandardItemModel models[4];
 void init_models(StartPage * start_page)
 {
@@ -43,27 +45,46 @@ void init_models(StartPage * start_page)
 #undef SET_MODEL
 }
 
-int main(int argc, char * argv[])
+int run_wts()
 {
-    QApplication app(argc, argv);
     QMainWindow main_win;
     main_win.setWindowTitle("Watch that sound");
 
     SlidingStackedWidget * stacker = new SlidingStackedWidget();
+    stacker->setSpeed(1000);
+    stacker->setVerticalMode();
     main_win.setCentralWidget(stacker);
 
     StartPage * start_page = new StartPage();
     stacker->addWidget(start_page);
-    stacker->setSpeed(500);
 
-    Stub * stub = new Stub(&app);
+    QLabel * project_editor = new QLabel("Here be project editor");
+    stacker->addWidget(project_editor);
+
+    Stub * stub = new Stub(qApp);
     QObject::connect(start_page,SIGNAL(import_video(QString)),stub,SLOT(unimplemented()));
-    QObject::connect(start_page,SIGNAL(create_new_project(QString,QString)),stub,SLOT(unimplemented()));
-    QObject::connect(start_page,SIGNAL(open_project(QString)),stub,SLOT(unimplemented()));
     QObject::connect(start_page,SIGNAL(open_file(QString)),stub,SLOT(unimplemented()));
+
+    QObject::connect(start_page,SIGNAL(create_new_project(QString,QString)),stacker,SLOT(slideInNext()));
+    QObject::connect(start_page,SIGNAL(open_project(QString)),stacker,SLOT(slideInNext()));
 
     init_models(start_page);
 
     main_win.show();
-    return app.exec();
+    return qApp->exec();
+}
+
+int main(int argc, char * argv[])
+{
+    QApplication app(argc, argv);
+    QStringList args = QCoreApplication::arguments();
+
+    if (args.contains("--test")) {
+        // integration testing
+        TestWtsIntegration suite(args.mid(args.indexOf("--test") + 1 ));
+        return suite.runTests();
+    } else {
+        return run_wts();
+    }
+
 }

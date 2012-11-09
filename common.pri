@@ -40,6 +40,9 @@ CONFIG(uitools) {
 }
 
 main_exe {
+  # main executable is self-testing
+  QT += testlib
+  CONFIG += qtestlib
   wts.target.sort = "executable"
   DESTDIR = $$wts.top.relative
   TARGET = WatchThatSound
