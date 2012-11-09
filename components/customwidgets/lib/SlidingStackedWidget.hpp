@@ -18,7 +18,7 @@ public:
     };
 
     //! The Constructor and Destructor
-    SlidingStackedWidget(QWidget *parent);
+    SlidingStackedWidget(QWidget *parent = NULL);
     ~SlidingStackedWidget(void);
 
 public slots:

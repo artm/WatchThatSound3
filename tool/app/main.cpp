@@ -1,5 +1,6 @@
 #include "startpage/StartPage"
 #include "utils/Stub"
+#include "customwidgets/SlidingStackedWidget"
 
 QStandardItemModel models[4];
 void init_models(StartPage * start_page)
@@ -48,12 +49,17 @@ int main(int argc, char * argv[])
     QMainWindow main_win;
     main_win.setWindowTitle("Watch that sound");
 
+    SlidingStackedWidget * stacker = new SlidingStackedWidget();
+    main_win.setCentralWidget(stacker);
+
     StartPage * start_page = new StartPage();
-    main_win.setCentralWidget(start_page);
+    stacker->addWidget(start_page);
+    stacker->setSpeed(500);
 
     Stub * stub = new Stub(&app);
     QObject::connect(start_page,SIGNAL(import_video(QString)),stub,SLOT(unimplemented()));
     QObject::connect(start_page,SIGNAL(create_new_project(QString,QString)),stub,SLOT(unimplemented()));
+    QObject::connect(start_page,SIGNAL(open_project(QString)),stub,SLOT(unimplemented()));
     QObject::connect(start_page,SIGNAL(open_file(QString)),stub,SLOT(unimplemented()));
 
     init_models(start_page);
