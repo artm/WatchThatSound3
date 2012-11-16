@@ -219,6 +219,21 @@ private slots:
         QCOMPARE( start_page->selected_filename( area_under_test->objectName() ) , file_name );
     }
 
+    void test_select_data()
+    {
+        test_selected_filename_data();
+    }
+
+    void test_select()
+    {
+        QFETCH(QString, area_title);
+        QFETCH(int, row_num);
+
+        QAbstractItemView * area_under_test = area(area_title);
+        start_page->select(area_under_test->objectName(), row_num);
+        QCOMPARE( area_under_test->currentIndex().row(), row_num );
+    }
+
 public slots:
     // public slots don't get run as individual tests
     void reject_active_modal() {

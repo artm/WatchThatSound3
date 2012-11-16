@@ -120,3 +120,11 @@ QAbstractItemView * StartPage::area_of( const QAbstractItemModel * model )
     }
     return NULL;
 }
+
+void StartPage::select(const QString &area_name, int row_index)
+{
+    QAbstractItemView * area = findChild<QAbstractItemView *>(area_name);
+    Q_ASSERT(area);
+    QModelIndex index = area->model()->index(row_index, 0);
+    area->setCurrentIndex( index );
+}

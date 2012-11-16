@@ -30,6 +30,8 @@ public slots:
     void on_open_get_started_clicked();
     void on_add_video_clicked();
 
+    void select(const QString& area_name, int row_index);
+
 protected:
     QAbstractItemView * area_of( const QAbstractItemModel * model );
 };
