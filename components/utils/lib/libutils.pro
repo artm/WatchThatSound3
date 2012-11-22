@@ -1,10 +1,14 @@
 CONFIG += component
 SOURCES = \
-    Stub.cpp
+    Stub.cpp \
+    GuiTestingBase.cpp
 HEADERS = \
-    Stub.hpp
+    Stub.hpp \
+    GuiTestingBase.hpp
 wts.top.relative = ../../..
 include( $$wts.top.relative/common.pri )
+
+
 
 
 

@@ -2,9 +2,11 @@
 #define TESTWTSINTEGRATION_HPP
 
 #include "stable.h"
-#include "WtsShell.hpp"
+#include "utils/GuiTestingBase"
 
-class TestWtsIntegration : public QObject
+class WtsShell;
+
+class TestWtsIntegration : public GuiTestingBase
 {
     Q_OBJECT
 public:
