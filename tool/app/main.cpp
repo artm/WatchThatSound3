@@ -12,7 +12,8 @@ int main(int argc, char * argv[])
 
     if (args.contains("--test")) {
         // integration testing
-        TestWtsIntegration suite(args.mid(args.indexOf("--test") + 1 ));
+        QStringList slice = args.mid(args.indexOf("--test") + 1 );
+        TestWtsIntegration suite(slice);
         return suite.runTests();
     } else {
         WtsShell * shell = new WtsShell(qApp);
