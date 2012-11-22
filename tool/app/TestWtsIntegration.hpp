@@ -23,7 +23,8 @@ private slots:
     void cleanup(); // will be called after every testfunction.
 
     // should tests...
-    void shouldStartWithStartPage();
+    void application_starts_with_start_page();
+    void clicking_continue_opens_project_editor();
 
 protected:
     QStringList args;

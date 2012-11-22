@@ -1,8 +1,10 @@
 #include "TestWtsIntegration.hpp"
+#include "WtsShell.hpp"
 #include "startpage/StartPage"
 
+
 TestWtsIntegration::TestWtsIntegration(const QStringList& _args) :
-    QObject(qApp), args(_args), shell(NULL)
+    args(_args), shell(NULL)
 {
 }
 
@@ -33,7 +35,7 @@ void TestWtsIntegration::cleanup()
     delete shell;
 }
 
-void TestWtsIntegration::shouldStartWithStartPage()
+void TestWtsIntegration::application_starts_with_start_page()
 {
     // Given application has started
     shell->assemble();
@@ -48,6 +50,21 @@ void TestWtsIntegration::shouldStartWithStartPage()
     QVERIFY(start_page->isVisible());
 }
 
+void TestWtsIntegration::clicking_continue_opens_project_editor()
+{
+    // Given start page is displayed
+    shell->assemble();
+    shell->start();
+    QWidget * main_window = find_main_window();
+    StartPage * start_page = main_window->findChild<StartPage *>();
+    // And a project is selected
+    start_page->select("projects", 0);
+    // When I click "Continue Project"
+    press( "Continue Project", start_page );
+    // Then I see project editor
+    QFAIL("Test that this is project editor");
+}
+
 QWidget * TestWtsIntegration::find_main_window()
 {
     foreach(QWidget * widget, QApplication::topLevelWidgets() ) {
@@ -57,3 +74,4 @@ QWidget * TestWtsIntegration::find_main_window()
     }
     return NULL;
 }
+
