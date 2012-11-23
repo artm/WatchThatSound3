@@ -15,9 +15,9 @@ public:
             widget = widget_under_test;
     }
 
-    // defaulting to widget_under_test
+    QWidget * find_main_window();
     QAbstractButton * button(const QString& button_text, QWidget * top_widget = NULL);
-    void press(const QString& button_text, QWidget * top_widget = NULL);
+    void press(const QString& button_text, QWidget * top_widget = NULL);    
 
     template<typename WidgetType>
     WidgetType find_widget_with_text( QWidget * container, const QString& text )

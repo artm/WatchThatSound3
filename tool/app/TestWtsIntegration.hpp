@@ -14,15 +14,12 @@ public:
 
     int runTests();
 
-    QWidget * find_main_window();
-
 private slots:
     void initTestCase(); // will be called before the first testfunction is executed.
     void cleanupTestCase(); // will be called after the last testfunction was executed.
     void init(); // will be called before each testfunction is executed.
     void cleanup(); // will be called after every testfunction.
 
-    // should tests...
     void application_starts_with_start_page();
     void clicking_continue_opens_project_editor();
 

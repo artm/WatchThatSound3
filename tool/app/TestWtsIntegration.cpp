@@ -74,13 +74,6 @@ void TestWtsIntegration::clicking_continue_opens_project_editor()
     QCOMPARE( shell->current_page(), fake_editor );
 }
 
-QWidget * TestWtsIntegration::find_main_window()
 {
-    foreach(QWidget * widget, QApplication::topLevelWidgets() ) {
-        QMainWindow * window = qobject_cast<QMainWindow *>(widget);
-        if (window)
-            return window;
-    }
-    return NULL;
 }
 

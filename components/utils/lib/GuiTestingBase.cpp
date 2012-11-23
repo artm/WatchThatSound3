@@ -18,3 +18,13 @@ QAbstractButton * GuiTestingBase::button(const QString &button_text, QWidget * t
     return find_widget_with_text<QAbstractButton*>(top_widget, button_text);
 }
 
+QWidget * GuiTestingBase::find_main_window()
+{
+    foreach(QWidget * widget, QApplication::topLevelWidgets() ) {
+        QMainWindow * window = qobject_cast<QMainWindow *>(widget);
+        if (window)
+            return window;
+    }
+    return NULL;
+}
+
