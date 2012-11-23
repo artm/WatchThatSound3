@@ -2,13 +2,17 @@
 #include "startpage/StartPage"
 #include "utils/Stub"
 #include "customwidgets/SlidingStackedWidget"
+#include "utils/Macros"
 
 struct WtsShell::Detail {
     QMainWindow * main_window;
+    SlidingStackedWidget * stacker;
     QStandardItemModel models[4];
+    QHash<QString, QWidget *> widgets;
 
     Detail() :
-        main_window(NULL)
+        main_window(NULL),
+        stacker(NULL)
     {}
     ~Detail() {
         if (main_window) delete main_window;
@@ -53,8 +57,6 @@ struct WtsShell::Detail {
 
     #undef SET_MODEL
     }
-
-
 };
 
 WtsShell::WtsShell(QObject *parent) :
@@ -69,29 +71,45 @@ WtsShell::~WtsShell()
 void WtsShell::assemble()
 {
     Q_ASSERT(detail);
-    if (!detail->main_window) {
-        detail->main_window = new QMainWindow();
-        detail->main_window->setWindowTitle("Watch that sound");
+
+#define USE_OR_INIT_WIDGET(ClassName, name, ...) \
+    if (!detail->widgets.contains(#name)) detail->widgets[#name] = new ClassName(__VA_ARGS__); \
+    ClassName * name = qobject_cast<ClassName *>(detail->widgets[#name]); \
+    if (name)
+
+    USE_OR_INIT_WIDGET(QMainWindow, main_window) {
+        detail->main_window = main_window;
+        main_window->setWindowTitle("Watch that sound");
     }
 
-    SlidingStackedWidget * stacker = new SlidingStackedWidget();
-    stacker->setSpeed(1000);
-    stacker->setVerticalMode();
-    detail->main_window->setCentralWidget(stacker);
+    USE_OR_INIT_WIDGET(SlidingStackedWidget, stacker) {
+        detail->stacker = stacker;
+        stacker->setSpeed(1000);
+        stacker->setVerticalMode();
+    }
+    NOP_OR(main_window)->setCentralWidget(detail->widgets["stacker"]);
 
-    StartPage * start_page = new StartPage();
-    detail->setup_fake_models( start_page );
-    stacker->addWidget(start_page);
+    USE_OR_INIT_WIDGET(StartPage, start_page) {
+        // extra setup for real start page
+        detail->setup_fake_models( start_page );
+        Stub * stub = new Stub(qApp);
+        QObject::connect(start_page,SIGNAL(import_video(QString)),stub,SLOT(unimplemented()));
+        QObject::connect(start_page,SIGNAL(open_file(QString)),stub,SLOT(unimplemented()));
 
-    QLabel * project_editor = new QLabel("Here be project editor");
-    stacker->addWidget(project_editor);
+        if (stacker) {
+            QObject::connect(start_page,SIGNAL(create_new_project(QString,QString)),stacker,SLOT(slideInNext()));
+            QObject::connect(start_page,SIGNAL(open_project(QString)),stacker,SLOT(slideInNext()));
+        }
+    }
+    NOP_OR(stacker)->addWidget(detail->widgets["start_page"]);
 
-    Stub * stub = new Stub(qApp);
-    QObject::connect(start_page,SIGNAL(import_video(QString)),stub,SLOT(unimplemented()));
-    QObject::connect(start_page,SIGNAL(open_file(QString)),stub,SLOT(unimplemented()));
+    USE_OR_INIT_WIDGET(QLabel, project_editor, "Here be project editor") {
+        // extra setup for real project editor
+        // TODO
+    }
+    NOP_OR(stacker)->addWidget(detail->widgets["project_editor"]);
 
-    QObject::connect(start_page,SIGNAL(create_new_project(QString,QString)),stacker,SLOT(slideInNext()));
-    QObject::connect(start_page,SIGNAL(open_project(QString)),stacker,SLOT(slideInNext()));
+#undef USE_OR_INIT_WIDGET
 }
 
 void WtsShell::start()
@@ -100,4 +118,22 @@ void WtsShell::start()
     Q_ASSERT(detail->main_window);
 
     detail->main_window->show();
+}
+
+void WtsShell::add_widget(const QString& tag, QWidget* widget)
+{
+    Q_ASSERT(detail);
+    detail->widgets[tag] = widget;
+}
+
+QWidget * WtsShell::current_page()
+{
+    Q_ASSERT(detail);
+    return NULL_OR(detail->stacker)->currentWidget();
+}
+
+QWidget * WtsShell::widget(const QString &tag)
+{
+    Q_ASSERT(detail);
+    return detail->widgets.value(tag,NULL);
 }
