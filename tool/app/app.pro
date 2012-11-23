@@ -1,7 +1,8 @@
 CONFIG += main_exe
 SOURCES = main.cpp \
     TestWtsIntegration.cpp \
-    WtsShell.cpp
+    WtsShell.cpp \
+    TestRunner.cpp
 wts.components = startpage utils customwidgets
 wts.top.relative = ../..
 include( $$wts.top.relative/common.pri )
@@ -11,7 +12,10 @@ RESOURCES += \
 
 HEADERS += \
     TestWtsIntegration.hpp \
-    WtsShell.hpp
+    WtsShell.hpp \
+    TestRunner.hpp
+
+
 
 
 

@@ -3,6 +3,7 @@
 #include "customwidgets/SlidingStackedWidget"
 
 #include "TestWtsIntegration.hpp"
+#include "TestRunner.hpp"
 #include "WtsShell.hpp"
 
 int main(int argc, char * argv[])
@@ -15,6 +16,11 @@ int main(int argc, char * argv[])
         QStringList slice = args.mid(args.indexOf("--test") + 1 );
         TestWtsIntegration suite(slice);
         return suite.runTests();
+    } else if (args.contains("--test-suite")) {
+        // test runner for the individual component tests
+        QStringList slice = args.mid(args.indexOf("--test-suite") + 1 );
+        TestRunner runner(slice);
+        return runner.run();
     } else {
         WtsShell * shell = new WtsShell(qApp);
         shell->assemble();
