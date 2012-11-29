@@ -2,7 +2,7 @@
 
 #include "startpage/StartPage"
 #include "utils/GuiTestingBase"
-#include "dialog_spec_helper.hpp"
+#include "utils/DialogSpecHelper"
 
 class StartPageTest: public GuiTestingBase
 {
