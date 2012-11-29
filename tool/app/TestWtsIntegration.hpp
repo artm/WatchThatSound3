@@ -22,6 +22,10 @@ private slots:
 
     void application_starts_with_start_page();
     void clicking_continue_opens_project_editor();
+    void clicking_new_project_opens_project_editor();
+
+protected slots:
+    void verify_new_project_dialog(QWidget*active_modal);
 
 protected:
     QStringList args;
