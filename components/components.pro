@@ -1,2 +1,3 @@
 TEMPLATE = subdirs
-SUBDIRS = startpage utils customwidgets
+SUBDIRS = utils customwidgets startpage
+CONFIG += ordered

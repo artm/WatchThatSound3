@@ -14,7 +14,10 @@ PRECOMPILED_HEADER = $$wts.src.root/stable.h
 INCLUDEPATH += $$wts.src.root/components
 
 # find component libraries
-LIBS += -L$$wts.top.relative/lib/ $$join(wts.components,' -l',-l)
+!isEmpty(wts.components):LIBS += -L$$wts.top.relative/lib/
+for(comp, wts.components) {
+  LIBS += -l$${comp}
+}
 
 # suppress warnings from QtSDK 4.8.1
 QMAKE_LFLAGS = -w
@@ -50,7 +53,7 @@ main_exe {
   TEMPLATE = lib
   DESTDIR = $$wts.top.relative/lib/
   TARGET = $$parentDirname($$_PRO_FILE_)
-  wts.target.sort = "static library"
+  wts.target.sort = "dynamic component"
 } else:test {
   QT += testlib
   CONFIG += qtestlib
