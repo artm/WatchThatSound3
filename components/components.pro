@@ -1,3 +1,3 @@
 TEMPLATE = subdirs
-SUBDIRS = utils customwidgets startpage
+SUBDIRS = utils customwidgets startpage projecteditor
 CONFIG += ordered
