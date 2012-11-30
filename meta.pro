@@ -6,4 +6,3 @@ support/QtCreator/wts-component/component.pro \
 support/QtCreator/wts-component/lib.pro \
 support/QtCreator/wts-component/test.pro \
 support/QtCreator/wts-component/test_template.cpp
-

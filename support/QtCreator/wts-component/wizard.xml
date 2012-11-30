@@ -58,21 +58,19 @@ leave room for the Qt 4 target page.
         <file source="lib.pro" target="%ComponentName:l%/lib/lib%ComponentName:l%.pro" openeditor="false"/>
         <file source="test.pro" target="%ComponentName:l%/test/%ComponentName:l%_test.pro" openeditor="false"/>
         <file source="test_template.cpp" target="%ComponentName:l%/test/%ComponentName:l%_test.cpp" openeditor="false"/>
-        <!-- if requested - also create the initial class -->
     </files>
 
     <!-- Component Configuration -->
 
     <fieldpagetitle>Configure Component</fieldpagetitle>
     <fields>
-        <field name="ComponentName">
+        <field name="ComponentName" mandatory="true">
             <fieldcontrol class="QLineEdit" validator="^[a-zA-Z0-9_]+$" defaulttext="NewComponent" />
             <fielddescription>Component name:</fielddescription>
         </field>
         <field name="UITOOLS">
             <fieldcontrol class="QCheckBox"/>
             <fielddescription>Include UiTools support</fielddescription>
-            <!-- TODO also add resources and a form then -->
         </field>
     </fields>
 </wizard>
