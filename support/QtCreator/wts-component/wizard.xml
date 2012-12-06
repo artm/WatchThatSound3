@@ -68,9 +68,5 @@ leave room for the Qt 4 target page.
             <fieldcontrol class="QLineEdit" validator="^[a-zA-Z0-9_]+$" defaulttext="NewComponent" />
             <fielddescription>Component name:</fielddescription>
         </field>
-        <field name="UITOOLS">
-            <fieldcontrol class="QCheckBox"/>
-            <fielddescription>Include UiTools support</fielddescription>
-        </field>
     </fields>
 </wizard>
