@@ -1,17 +1,11 @@
 #include "StartPage.hpp"
+#include "utils/WidgetUtils"
 
 StartPage::StartPage(QWidget *parent) :
     QWidget(parent)
-{
-    QUiLoader loader;
-    QFile file(":/forms/startpage.ui");
-    file.open(QFile::ReadOnly);
-    QWidget * form = loader.load(&file, this);
-    file.close();
-    QVBoxLayout *layout = new QVBoxLayout;
-    layout->addWidget( form );
-    setLayout( layout );
-
+{    
+    setLayout( new QVBoxLayout );
+    WidgetUtils::load_form(this, ":/forms/startpage.ui");
     QMetaObject::connectSlotsByName( this );
 }
 
@@ -47,11 +41,8 @@ void StartPage::handle_selectionChanged()
 
 void StartPage::on_new_project_clicked()
 {
-    QUiLoader loader;
-    QFile file(":/forms/new_project_dialog.ui");
-    file.open(QFile::ReadOnly);
-    QDialog * dialog = qobject_cast<QDialog *>(loader.load(&file, this));
-    file.close();
+
+    QDialog * dialog = WidgetUtils::load_dialog(this, ":/forms/new_project_dialog.ui");
 
     Q_ASSERT(dialog);
 
