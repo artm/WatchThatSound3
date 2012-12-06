@@ -1,8 +1,9 @@
 #include "WtsShell.hpp"
 #include "startpage/StartPage"
-#include "utils/Stub"
+#include "projecteditor/ProjectEditor"
 #include "customwidgets/SlidingStackedWidget"
 #include "utils/Macros"
+#include "utils/Stub"
 
 struct WtsShell::Detail {
     QMainWindow * main_window;
@@ -103,7 +104,7 @@ void WtsShell::assemble()
     }
     NOP_OR(stacker)->addWidget(detail->widgets["start_page"]);
 
-    USE_OR_INIT_WIDGET(QLabel, project_editor, "Here be project editor") {
+    USE_OR_INIT_WIDGET(ProjectEditor, project_editor) {
         // extra setup for real project editor
         // TODO
     }

@@ -1,7 +1,8 @@
-CONFIG += component uitools
+CONFIG += component
 SOURCES = StartPage.cpp
 HEADERS = StartPage.hpp
 wts.top.relative = ../../..
+wts.components += utils
 include( $$wts.top.relative/common.pri )
 
 FORMS += \
