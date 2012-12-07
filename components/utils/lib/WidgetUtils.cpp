@@ -12,7 +12,7 @@ QWidget * WidgetUtils::load_form(QWidget *widget, const QString &url, bool add_t
     if (add_to_layout && widget->layout())
         widget->layout()->addWidget( form );
 
-    return widget;
+    return form;
 }
 
 QDialog *WidgetUtils::load_dialog(QWidget *widget, const QString &url)
