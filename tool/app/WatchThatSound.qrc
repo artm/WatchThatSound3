@@ -3,4 +3,7 @@
         <file alias="bit6.jpg">resources/icons/wts-bit_006.jpg</file>
         <file alias="bit10.jpg">resources/icons/wts-bit_010.jpg</file>
     </qresource>
+    <qresource prefix="/css">
+        <file>application.css</file>
+    </qresource>
 </RCC>

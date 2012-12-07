@@ -11,6 +11,16 @@ int main(int argc, char * argv[])
     QApplication app(argc, argv);
     QStringList args = QCoreApplication::arguments();
 
+    QFile application_css(":/css/application.css");
+    if (application_css.exists()) {
+        application_css.open(QFile::ReadOnly);
+        QString style_sheet(application_css.readAll());
+        application_css.close();
+        qApp->setStyleSheet(style_sheet);
+    } else {
+        qWarning() << "Stylesheet not found among the resources...";
+    }
+
     if (args.contains("--test")) {
         // integration testing
         QStringList slice = args.mid(args.indexOf("--test") + 1 );

@@ -15,9 +15,4 @@ HEADERS += \
     WtsShell.hpp \
     TestRunner.hpp
 
-
-
-
-
-
-
+OTHER_FILES += application.css
