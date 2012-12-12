@@ -1,6 +1,6 @@
 #include "WidgetUtils.hpp"
 
-QWidget * WidgetUtils::load_form(QWidget *widget, const QString &url, bool add_to_layout)
+QWidget * WidgetUtils::load_form(QWidget *widget, const QString &url, bool use_layout)
 {
     QUiLoader loader;
     QFile file(url);
@@ -9,8 +9,9 @@ QWidget * WidgetUtils::load_form(QWidget *widget, const QString &url, bool add_t
     QWidget * form = loader.load(&file, widget);
     file.close();
 
-    if (add_to_layout && widget && widget->layout())
-        widget->layout()->addWidget( form );
+    if (use_layout && widget && form->layout()) {
+        widget->setLayout( form->layout() );
+    }
 
     return form;
 }

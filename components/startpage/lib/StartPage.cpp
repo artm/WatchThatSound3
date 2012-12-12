@@ -4,8 +4,8 @@
 StartPage::StartPage(QWidget *parent) :
     QWidget(parent)
 {    
-    setLayout( new QVBoxLayout );
     WidgetUtils::load_form(this, ":/forms/startpage.ui");
+    layout()->setMargin(10);
     QMetaObject::connectSlotsByName( this );
 }
 
