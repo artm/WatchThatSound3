@@ -54,6 +54,7 @@ ProjectEditor::ProjectEditor(QWidget *parent)
     detail->setup_tab_bar(this);
 
     QMetaObject::connectSlotsByName(this);
+    QSplitter * splitter = findChild<QSplitter*>();
     on_tabs_currentChanged( findChild<QTabBar*>("tabs")->currentIndex() );
 }
 
@@ -68,11 +69,20 @@ void ProjectEditor::on_tabs_currentChanged(int index)
         QString widget_name = Detail::dynamic_widgets[i];
         QString container_name = widget_name + "_container";
         QWidget * container = findChild<QWidget*>(container_name);
+        QSizePolicy policy = container->sizePolicy();
+
         switch( preset[i] ) {
         case 0:
             container->hide();
             break;
-        default:
+        case 1:
+            policy.setVerticalStretch(0);
+            container->setSizePolicy(policy);
+            container->show();
+            break;
+        case 2:
+            policy.setVerticalStretch(1);
+            container->setSizePolicy(policy);
             container->show();
             break;
         }
