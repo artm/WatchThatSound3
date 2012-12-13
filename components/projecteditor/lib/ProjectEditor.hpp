@@ -13,6 +13,7 @@ public:
 signals:
     
 public slots:
+    void on_tabs_currentChanged(int index);
 
 protected:
     class Detail;
