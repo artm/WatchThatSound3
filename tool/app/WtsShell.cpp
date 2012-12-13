@@ -119,6 +119,11 @@ void WtsShell::start()
     Q_ASSERT(detail);
     Q_ASSERT(detail->main_window);
 
+    QStringList args = QCoreApplication::arguments();
+    if (args.contains("--open-project")) {
+        detail->stacker->setCurrentWidget( widget("project_editor") );
+    }
+
     detail->main_window->show();
 }
 
