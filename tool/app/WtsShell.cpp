@@ -76,6 +76,7 @@ void WtsShell::assemble()
 #define USE_OR_INIT_WIDGET(ClassName, name, ...) \
     if (!detail->widgets.contains(#name)) detail->widgets[#name] = new ClassName(__VA_ARGS__); \
     ClassName * name = qobject_cast<ClassName *>(detail->widgets[#name]); \
+    name->setObjectName(#name); \
     if (name)
 
     USE_OR_INIT_WIDGET(QMainWindow, main_window) {
