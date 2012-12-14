@@ -1,9 +1,11 @@
 # WTS component:
 CONFIG += component
 SOURCES = \
-    SlidingStackedWidget.cpp
+    SlidingStackedWidget.cpp \
+    TristateCompoundInterface.cpp
 HEADERS = \
-    SlidingStackedWidget.hpp
+    SlidingStackedWidget.hpp \
+    TristateCompoundInterface.hpp
 wts.top.relative = ../../..
 include( $$wts.top.relative/common.pri )
 
