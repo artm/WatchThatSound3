@@ -1,7 +1,6 @@
 #include "ProjectEditor.hpp"
 #include "utils/WidgetUtils"
 
-
 struct ProjectEditor::Detail
 {
     static const QStringList widget_presets;
@@ -54,7 +53,6 @@ ProjectEditor::ProjectEditor(QWidget *parent)
     detail->setup_tab_bar(this);
 
     QMetaObject::connectSlotsByName(this);
-    QSplitter * splitter = findChild<QSplitter*>();
     on_tabs_currentChanged( findChild<QTabBar*>("tabs")->currentIndex() );
 }
 

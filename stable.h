@@ -1,8 +1,15 @@
 #ifdef __cplusplus
 extern "C" {
+
+#ifdef WITH_FFMPEG
+#include <libavcodec/avcodec.h>
+#include <libavformat/avformat.h>
+#include <libavutil/avutil.h>
+#include <libswscale/swscale.h>
+#endif WITH_FFMPEG
+
 #endif
 /* C headers */
-
 
 #ifdef __cplusplus
 } // extern "C" {
