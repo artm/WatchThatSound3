@@ -8,6 +8,7 @@ HEADERS = \
     GuiTestingBase.hpp \
     Macros.hpp \
     DialogSpecHelper.hpp \
-    Widgetutils.hpp
+    Widgetutils.hpp \
+    Exception.hpp
 wts.top.relative = ../../..
 include( $$wts.top.relative/common.pri )
