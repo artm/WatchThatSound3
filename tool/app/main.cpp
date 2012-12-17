@@ -1,5 +1,6 @@
 #include "startpage/StartPage"
 #include "utils/Stub"
+#include "utils/Exception"
 #include "customwidgets/SlidingStackedWidget"
 
 #include "TestWtsIntegration.hpp"
@@ -32,10 +33,18 @@ int main(int argc, char * argv[])
         TestRunner runner(slice);
         return runner.run();
     } else {
-        WtsShell * shell = new WtsShell(qApp);
-        shell->assemble();
-        shell->start();
-        return qApp->exec();
+        try {
+            WtsShell * shell = new WtsShell(qApp);
+            shell->assemble();
+            shell->start();
+            return qApp->exec();
+        } catch( const Exception& ex ) {
+            qDebug() << ex.message;
+            return 100;
+        } catch ( ... ) {
+            qDebug() << "Unhandled unknown exception";
+            return 100;
+        }
     }
 
 }
