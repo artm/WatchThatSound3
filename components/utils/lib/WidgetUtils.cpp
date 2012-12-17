@@ -4,12 +4,18 @@ QWidget * WidgetUtils::load_form(QWidget *widget, const QString &url, bool use_l
 {
     QUiLoader loader;
     QFile file(url);
-    Q_ASSERT( file.exists() );
+
+    if (!file.exists())
+        RAISE_A(ResourceNotFound, url);
+
     file.open(QFile::ReadOnly);
     QWidget * form = loader.load(&file, widget);
     file.close();
 
     if (use_layout && widget && form->layout()) {
+        if (widget->layout()) {
+            delete widget->layout();
+        }
         widget->setLayout( form->layout() );
     }
 
