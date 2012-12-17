@@ -9,7 +9,11 @@ wts.components += utils
 include( $$wts.top.relative/common.pri )
 
 FORMS += \
-    ProjectEditor.ui
+    ProjectEditor.ui \
+    storyboard.ui \
+    tension.ui \
+    score.ui \
+    record.ui
 
 RESOURCES += \
     ProjectEditor.qrc

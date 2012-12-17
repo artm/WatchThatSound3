@@ -1,5 +1,9 @@
 <RCC>
     <qresource prefix="/forms">
         <file>ProjectEditor.ui</file>
+        <file>storyboard.ui</file>
+        <file>record.ui</file>
+        <file>score.ui</file>
+        <file>tension.ui</file>
     </qresource>
 </RCC>

@@ -61,121 +61,49 @@
        </item>
        <item>
         <widget class="QGroupBox" name="record_container">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>90</height>
-          </size>
-         </property>
          <property name="title">
           <string>Record</string>
-         </property>
-         <property name="flat">
-          <bool>true</bool>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_6">
           <property name="margin">
            <number>0</number>
           </property>
-          <item>
-           <widget class="QWidget" name="record" native="true"/>
-          </item>
          </layout>
         </widget>
        </item>
        <item>
         <widget class="QGroupBox" name="score_container">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>90</height>
-          </size>
-         </property>
          <property name="title">
           <string>Visual score</string>
-         </property>
-         <property name="flat">
-          <bool>true</bool>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_5">
           <property name="margin">
            <number>0</number>
           </property>
-          <item>
-           <widget class="QWidget" name="score" native="true"/>
-          </item>
          </layout>
         </widget>
        </item>
        <item>
         <widget class="QGroupBox" name="tension_container">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>90</height>
-          </size>
-         </property>
          <property name="title">
           <string>Tension</string>
-         </property>
-         <property name="flat">
-          <bool>true</bool>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_4">
           <property name="margin">
            <number>0</number>
           </property>
-          <item>
-           <widget class="QWidget" name="tension" native="true"/>
-          </item>
          </layout>
         </widget>
        </item>
        <item>
         <widget class="QGroupBox" name="storyboard_container">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>90</height>
-          </size>
-         </property>
          <property name="title">
           <string>Storyboard</string>
-         </property>
-         <property name="flat">
-          <bool>true</bool>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_3">
           <property name="margin">
            <number>0</number>
           </property>
-          <item>
-           <widget class="QWidget" name="storyboard" native="true"/>
-          </item>
          </layout>
         </widget>
        </item>

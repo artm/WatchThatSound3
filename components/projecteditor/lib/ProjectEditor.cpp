@@ -4,7 +4,7 @@
 struct ProjectEditor::Detail
 {
     static const QStringList widget_presets;
-    static const QStringList dynamic_widgets;
+    static const QStringList dynamic_widgets;    
     QList< QVector<int> > presets;
 
     Detail() {
@@ -32,6 +32,19 @@ struct ProjectEditor::Detail
             presets << states;
         }
     }
+
+    void populate_dynamic_widgets(ProjectEditor * self) {
+        foreach(QString row_name, dynamic_widgets) {
+            QString url = ":/forms/" + row_name + ".ui";
+            QWidget * container = self->findChild<QWidget *>( row_name + "_container" );
+            try {
+                WidgetUtils::load_form(container, url);
+            } catch ( const WidgetUtils::ResourceNotFound& ) {
+                // no form, ignore...
+                continue;
+            }
+        }
+    }
 };
 
 const QStringList ProjectEditor::Detail::widget_presets = QStringList()
@@ -51,6 +64,7 @@ ProjectEditor::ProjectEditor(QWidget *parent)
 {
     WidgetUtils::load_form(this,":/forms/ProjectEditor.ui");
     detail->setup_tab_bar(this);
+    detail->populate_dynamic_widgets(this);
 
     QMetaObject::connectSlotsByName(this);
     on_tabs_currentChanged( findChild<QTabBar*>("tabs")->currentIndex() );
