@@ -1,3 +1,7 @@
 QToolButton { font-weight: bold; }
 #display { background: black; }
 #record { background: red; color: white; }
+
+QGroupBox { font-size: 10px; }
+QGroupBox[active_state="2"] { font-weight: bold; }
+

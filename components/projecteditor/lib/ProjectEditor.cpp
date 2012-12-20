@@ -1,5 +1,6 @@
 #include "ProjectEditor.hpp"
 #include "utils/WidgetUtils"
+#include "utils/Macros"
 
 struct ProjectEditor::Detail
 {
@@ -45,6 +46,28 @@ struct ProjectEditor::Detail
             }
         }
     }
+
+    void set_widget_state( QWidget * container, int state )
+    {
+        QWidget * button_bar = container->findChild<QWidget*>("buttons");
+        container->setProperty("active_state", state);
+        WidgetUtils::update_widget_style(container);
+
+        switch( state ) {
+        case 0:
+            container->hide();
+            break;
+        case 1:
+            NOP_OR(button_bar)->hide();
+            container->show();
+            break;
+        case 2:
+            NOP_OR(button_bar)->show();
+            container->show();
+            break;
+        }
+
+    }
 };
 
 const QStringList ProjectEditor::Detail::widget_presets = QStringList()
@@ -80,23 +103,6 @@ void ProjectEditor::on_tabs_currentChanged(int index)
     for(int i = 0; i < preset.size(); ++i) {
         QString widget_name = Detail::dynamic_widgets[i];
         QString container_name = widget_name + "_container";
-        QWidget * container = findChild<QWidget*>(container_name);
-        QSizePolicy policy = container->sizePolicy();
-
-        switch( preset[i] ) {
-        case 0:
-            container->hide();
-            break;
-        case 1:
-            policy.setVerticalStretch(0);
-            container->setSizePolicy(policy);
-            container->show();
-            break;
-        case 2:
-            policy.setVerticalStretch(1);
-            container->setSizePolicy(policy);
-            container->show();
-            break;
-        }
+        detail->set_widget_state( findChild<QWidget*>(container_name), preset[i] );
     }
 }
