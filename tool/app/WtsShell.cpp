@@ -124,7 +124,7 @@ void WtsShell::start()
         detail->stacker->setCurrentWidget( widget("project_editor") );
     }
 
-    detail->main_window->show();
+    detail->main_window->showMaximized();
 }
 
 void WtsShell::add_widget(const QString& tag, QWidget* widget)
