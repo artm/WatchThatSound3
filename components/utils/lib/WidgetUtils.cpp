@@ -83,4 +83,10 @@ void WidgetUtils::replace_widget(QWidget *container, const QString &widget_name,
 
 }
 
+void WidgetUtils::update_widget_style(QWidget *widget)
+{
+    widget->style()->unpolish( widget );
+    widget->style()->polish( widget );
+}
+
 
