@@ -1,6 +1,7 @@
 #include "ScoreEditor.hpp"
 #include "Rainbow.hpp"
 #include "Project.hpp"
+#include "utils/Macros"
 
 using namespace WTS;
 
@@ -16,6 +17,8 @@ ScoreEditor::ScoreEditor(QWidget *parent)
     , m_newSymbol(0)
     , m_colorSelCircle(0)
 {
+    TRACE("score editor constructor");
+
     initNewSymbol();
     setRenderHints(QPainter::Antialiasing);
 

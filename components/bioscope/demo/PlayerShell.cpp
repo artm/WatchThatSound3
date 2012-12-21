@@ -2,6 +2,7 @@
 #include <bioscope/BioscopeDriver>
 
 #include "PlayerShell.hpp"
+#include "utils/Macros"
 
 struct PlayerShell::Detail {
     BioscopeDriver * driver;
@@ -43,7 +44,7 @@ void PlayerShell::setupUi()
     m_detail->canvas = findChild<QGraphicsView*>("canvas");
     m_detail->canvas->setScene( new QGraphicsScene( this ) );
     //m_detail->canvas->setViewport(new QGLWidget(QGLFormat(QGL::SampleBuffers)));
-    qDebug() << "FIXME enable GL backend";
+    FIXME("enable GL backend");
     m_detail->pixItem = new QGraphicsPixmapItem(0, m_detail->canvas->scene());
 
     m_detail->slider = findChild<QAbstractSlider *>("slider");

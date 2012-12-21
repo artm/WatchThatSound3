@@ -1,3 +1,5 @@
+#include "utils/Macros"
+
 #include "TimeLineWidget.hpp"
 #include "EditController.hpp"
 #include "Project.hpp"
@@ -33,8 +35,8 @@ TimeLineWidget::TimeLineWidget(QWidget *parent)
     connect(m_mainWindow,SIGNAL(storyBoardChanged()),SLOT(invalidateBackground()));
     connect(m_mainWindow,SIGNAL(samplerClock(qint64)),SLOT(setCurrentTime(qint64)));
 #else
-    qDebug() << "TODO: make sure time line gets connected to the\n"
-             << "project change / story board change / sampler clock signals";
+    FIXME("make sure time line gets connected to the\n"
+          "project change / story board change / sampler clock signals");
 #endif
 
     setScene(new QGraphicsScene(0.0,0.0,1.0,1.0,this));
@@ -138,7 +140,7 @@ void TimeLineWidget::drawBackground ( QPainter * painter, const QRectF & /*rect*
 
     painter->setPen(QColor(255,100,100,127));
     // painter->drawPath( m_mainWindow->tensionCurve() );
-    qDebug() << "FIXME draw tension curve in the background";
+    FIXME("draw tension curve in the background");
 
     if (m_editMode) {
         painter->setPen(QColor(255,100,100));
@@ -182,7 +184,7 @@ void TimeLineWidget::doSeekOnDrag( QMouseEvent * event )
 
             m_deafToSeek = true;
             // m_mainWindow->seek( t );
-            qDebug() << "FIXME emit seek from time line widget";
+            FIXME("emit seek from time line widget");
             m_cursorLine->setX( (double)t / project()->duration() );
             m_deafToSeek = false;
         }

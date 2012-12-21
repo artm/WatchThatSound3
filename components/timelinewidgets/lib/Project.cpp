@@ -1,5 +1,7 @@
 //#include "wts_version.h"
 
+#include "utils/Macros"
+
 #include "Project.hpp"
 #include "Common.hpp"
 #include "SoundBuffer.hpp"
@@ -321,7 +323,7 @@ void Project::save()
     xml.writeDTD("<!DOCTYPE soundtrack>");
     xml.writeStartElement("soundtrack");
     //xml.writeAttribute("version", WTS_VERSION);
-    qDebug() << "FIXME output version";
+    FIXME("output version");
     xml.writeAttribute("movie", movieFilename());
 
     emit saveSection(xml);
