@@ -2,6 +2,30 @@ QToolButton { font-weight: bold; }
 #display { background: black; }
 #record { background: red; color: white; }
 
-QGroupBox { font-size: 10px; }
-QGroupBox[active_state="2"] { font-weight: bold; }
+QGroupBox {
+  font-size: 10px;
+  margin-top: 15px;
+}
+QGroupBox::title {
+  border-top: 1px solid #aaa;
+  border-left: 1px solid #aaa;
+  border-right: 1px solid #aaa;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
 
+  background: white;
+
+  subcontrol-origin: margin;
+  subcontrol-position: top left;
+  padding: 0 3px;
+  margin-left: 5px;
+  margin-top: 2px;
+}
+
+QGroupBox[active_state="2"] { font-weight: bold; }
+QGroupBox[active_state="2"]::title {
+  background: #afa;
+}
+
+QGraphicsView { background: #f7f7f7; }
+QGroupBox[active_state="2"] QGraphicsView { background: #afa; }
