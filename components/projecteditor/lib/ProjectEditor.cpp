@@ -21,6 +21,7 @@ struct ProjectEditor::Detail
         tabs->addTab("2 tension line");
         tabs->addTab("3 visual score");
         tabs->addTab("4 audio edit");
+        tabs->setDrawBase(false);
     }
 
     void parse_presets() {
