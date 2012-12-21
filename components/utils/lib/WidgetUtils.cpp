@@ -83,10 +83,11 @@ void WidgetUtils::replace_widget(QWidget *container, const QString &widget_name,
 
 }
 
-void WidgetUtils::update_widget_style(QWidget *widget)
+void WidgetUtils::update_widget_style(QWidget *widget, bool recurse)
 {
     widget->style()->unpolish( widget );
     widget->style()->polish( widget );
+    if (recurse)
+        foreach(QWidget * child, widget->findChildren<QWidget*>())
+            update_widget_style(child, false);
 }
-
-
