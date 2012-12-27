@@ -39,6 +39,7 @@ struct ProjectEditor::Detail
         foreach(QString row_name, dynamic_widgets) {
             QString url = ":/forms/" + row_name + ".ui";
             QWidget * container = self->findChild<QWidget *>( row_name + "_container" );
+            if (!container) continue;
             try {
                 WidgetUtils::load_form(container, url);
             } catch ( const WidgetUtils::ResourceNotFound& ) {
