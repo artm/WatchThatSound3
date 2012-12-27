@@ -4,6 +4,9 @@
 #include "customwidgets/SlidingStackedWidget"
 #include "utils/Macros"
 #include "utils/Stub"
+#include "utils/WidgetUtils"
+
+#include "timelinewidgets/ScoreEditor"
 
 struct WtsShell::Detail {
     QMainWindow * main_window;
@@ -108,6 +111,9 @@ void WtsShell::assemble()
     USE_OR_INIT_WIDGET(ProjectEditor, project_editor) {
         // extra setup for real project editor
         // TODO
+
+        WidgetUtils::replace_widget( project_editor, "score", new WTS::ScoreEditor );
+
     }
     NOP_OR(stacker)->addWidget(detail->widgets["project_editor"]);
 

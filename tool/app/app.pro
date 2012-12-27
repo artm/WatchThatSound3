@@ -3,7 +3,7 @@ SOURCES = main.cpp \
     TestWtsIntegration.cpp \
     WtsShell.cpp \
     TestRunner.cpp
-wts.components = startpage utils customwidgets projecteditor
+wts.components = startpage utils customwidgets projecteditor timelinewidgets
 wts.top.relative = ../..
 include( $$wts.top.relative/common.pri )
 
