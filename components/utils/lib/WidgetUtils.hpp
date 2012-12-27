@@ -13,6 +13,12 @@ public:
         {}
     };
 
+    struct WidgetNotFound : public Exception {
+        WidgetNotFound( const QString& widget_name, const char * file, int line )
+            : Exception( QString("Widget not found: %1").arg(widget_name), file, line)
+        {}
+    };
+
     static QWidget * load_form(QWidget * widget, const QString& url, bool use_layout = true);
     static QDialog * load_dialog(QWidget * widget, const QString& url);
     static void replace_widget(QWidget * container, const QString& widget_name, QWidget * new_widget);
