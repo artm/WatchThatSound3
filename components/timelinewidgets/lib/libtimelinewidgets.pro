@@ -20,7 +20,6 @@ HEADERS = TimeLineWidget.hpp \
     SoundBuffer.hpp \
     SharpLine.hpp \
     Project.hpp \
-    Exception.hpp \
     BufferItem.hpp \
     Rainbow.hpp \
     ScoreSymbol.hpp \

@@ -1,6 +1,7 @@
 //#include "wts_version.h"
 
 #include "utils/Macros"
+#include "utils/Exception"
 
 #include "Project.hpp"
 #include "Common.hpp"
@@ -181,7 +182,7 @@ bool Project::loadSequence(QXmlStreamReader& xml)
                 buffer->buffer()->setGain( xml.attributes().value("gain").toString().toFloat() );
 
             emit newBufferAt(buffer);
-        } catch (SoundBuffer::FileNotFoundError& e) {
+        } catch (FileNotFound& e) {
             delete sb;
         }
         // finish off the element...

@@ -7,12 +7,6 @@
 class WidgetUtils
 {
 public:
-    struct ResourceNotFound : public Exception {
-        ResourceNotFound(const QString& url, const char * file, int line)
-            : Exception( QString("Resource not found: %1").arg(url), file, line)
-        {}
-    };
-
     struct WidgetNotFound : public Exception {
         WidgetNotFound( const QString& widget_name, const char * file, int line )
             : Exception( QString("Widget not found: %1").arg(widget_name), file, line)

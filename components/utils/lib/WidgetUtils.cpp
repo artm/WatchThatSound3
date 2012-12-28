@@ -5,8 +5,7 @@ QWidget * WidgetUtils::load_form(QWidget *widget, const QString &url, bool use_l
     QUiLoader loader;
     QFile file(url);
 
-    if (!file.exists())
-        RAISE_A(ResourceNotFound, url);
+    REQUIRE_FILE(file);
 
     file.open(QFile::ReadOnly);
     QWidget * form = loader.load(&file, widget);
