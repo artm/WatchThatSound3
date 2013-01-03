@@ -106,8 +106,12 @@ void TimeLineWidget::paintRange(QPainter * painter, qreal x, qreal w, const QCol
     painter->fillRect( r, QBrush(c) );
 }
 
-void TimeLineWidget::drawBackground ( QPainter * painter, const QRectF & /*rect*/ )
+void TimeLineWidget::drawBackground ( QPainter * painter, const QRectF & rect )
 {
+    if (!project()) {
+        QGraphicsView::drawBackground(painter, rect );
+        return;
+    }
     qreal total = project()->duration();
     qreal relX1 = 0.0f;
 
