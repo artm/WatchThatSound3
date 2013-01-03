@@ -11,7 +11,9 @@ SOURCES = TimeLineWidget.cpp \
     BufferItem.cpp \
     Rainbow.cpp \
     ScoreSymbol.cpp \
-    ScoreEditor.cpp
+    ScoreEditor.cpp \
+    StoryBoard.cpp \
+    TimeLineItem.cpp
 HEADERS = TimeLineWidget.hpp \
     TimeLineController.hpp \
     EditController.hpp \
@@ -25,7 +27,9 @@ HEADERS = TimeLineWidget.hpp \
     ScoreSymbol.hpp \
     ScoreEditor.hpp \
     ThumbsSpread.hpp \
-    Common.hpp
+    Common.hpp \
+    StoryBoard.hpp \
+    TimeLineItem.hpp
 wts.components += bioscope
 wts.top.relative = ../../..
 include( $$wts.top.relative/common.pri )
