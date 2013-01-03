@@ -22,7 +22,10 @@ struct FileNotFound : public Exception {
     static bool test(const QFile& file) { return !file.exists(); }
 };
 
-
+#define DEF_FORMAT_EXCEPTION(Type, format) struct Type : Exception { \
+    Type(const QString& _message, const char * file, int line) \
+    : Exception( QString(format).arg(_message), file, line ) {} \
+}
 
 #define RAISE_A(type, msg) throw type( msg, __FILE__, __LINE__ )
 #define RAISE(msg) RAISE_A(Exception, msg)

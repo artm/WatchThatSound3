@@ -1,6 +1,7 @@
 #pragma once
 #include "Synced.hpp"
 #include "WtsAudio.hpp"
+#include "utils/Exception"
 
 class Bioscope;
 
@@ -44,8 +45,8 @@ public:
     };
 
     // exceptions
-    struct InvalidProject {};
-    struct CantChangeDuration {};
+    DEF_FORMAT_EXCEPTION(InvalidProject, "Invalid project: $1");
+    DEF_FORMAT_EXCEPTION(CantChangeDuration, "Can't change duration: $1");
 
     // testing helpers
     explicit Project(QObject * parent = 0);
@@ -135,7 +136,6 @@ protected:
     QScopedPointer<Detail> m_detail;
 private:
     void setup();
-    void throwIfInvalid() const;
     qint64 m_duration;
 };
 

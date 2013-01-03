@@ -1,7 +1,6 @@
 //#include "wts_version.h"
 
 #include "utils/Macros"
-#include "utils/Exception"
 
 #include "Project.hpp"
 #include "Common.hpp"
@@ -16,6 +15,8 @@
 
 #include <QPainter>
 #include <QPrinter>
+
+#define THROW_IF_INVALID() do { if (this!=NULL && !isValid()) RAISE_A(InvalidProject, QString("$1").arg((long long)this)); } while(false)
 
 using namespace WTS;
 
@@ -193,7 +194,7 @@ bool Project::loadSequence(QXmlStreamReader& xml)
 
 void Project::addMarker(Project::MarkerType type, qint64 when, float tension)
 {
-    throwIfInvalid();
+    THROW_IF_INVALID();
 
     m_markers[when] = new Marker(type, when, this);
     m_markers[when]->setTension( tension );
@@ -210,7 +211,7 @@ void Project::addMarker(Project::MarkerType type, qint64 when, float tension)
 
 QList<Project::Marker *> Project::getMarkers(MarkerType type, bool forward) const
 {
-    throwIfInvalid();
+    THROW_IF_INVALID();
 
     QList<Marker *> scenes;
     foreach(Marker * m, m_markers) {
@@ -236,7 +237,7 @@ void Project::removeMarkerAt(quint64 at)
 }
 
 QPainterPath Project::tensionCurve(float width, float height, Marker * from, Marker * to) {
-    throwIfInvalid();
+    THROW_IF_INVALID();
 
     QPainterPath curve;
     QMapIterator<qint64, Project::Marker *> iter(m_markers);
@@ -473,17 +474,12 @@ void Project::openInExternalApp(SoundBuffer * buffer)
     }
 }
 
-void Project::throwIfInvalid() const
-{
-    if (!isValid()) throw InvalidProject();
-}
-
 void Project::setDuration(qint64 duration)
 {
     if (!m_detail->bioscope)
         m_duration = duration;
     else
-        throw CantChangeDuration();
+        RAISE_A(CantChangeDuration, "bioscope not set");
 }
 
 bool Project::isValid() const
@@ -735,14 +731,14 @@ void WTS::Project::drawScore( const QList<WTS::ScoreSymbol *>& score, qint64 sta
 }
 
 qint64 WTS::Project::duration() const {
-    throwIfInvalid();
+    THROW_IF_INVALID();
     return m_detail->bioscope ? m_detail->bioscope->duration() : m_duration; }
 int WTS::Project::videoWidth() const {
-    throwIfInvalid();
+    THROW_IF_INVALID();
     return m_detail->bioscope->width();
 }
 int WTS::Project::videoHeight() const {
-    throwIfInvalid();
+    THROW_IF_INVALID();
     return m_detail->bioscope->height();
 }
 
