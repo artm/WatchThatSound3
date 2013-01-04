@@ -6,6 +6,7 @@
 #include "utils/Stub"
 #include "utils/WidgetUtils"
 
+#include "timelinewidgets/StoryBoard"
 #include "timelinewidgets/ScoreEditor"
 
 struct WtsShell::Detail {
@@ -112,6 +113,7 @@ void WtsShell::assemble()
         // extra setup for real project editor
         // TODO
 
+        WidgetUtils::replace_widget( project_editor, "storyboard", new WTS::StoryBoard );
         WidgetUtils::replace_widget( project_editor, "score", new WTS::ScoreEditor );
 
     }
