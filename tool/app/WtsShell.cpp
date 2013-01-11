@@ -9,6 +9,7 @@
 #include "timelinewidgets/StoryBoard"
 #include "timelinewidgets/CurveEditor"
 #include "timelinewidgets/ScoreEditor"
+#include "timelinewidgets/SequencerTimeLine"
 
 struct WtsShell::Detail {
     QMainWindow * main_window;
@@ -117,7 +118,7 @@ void WtsShell::assemble()
         WidgetUtils::replace_widget( project_editor, "storyboard", new WTS::StoryBoard );
         WidgetUtils::replace_widget( project_editor, "tension", new WTS::CurveEditor );
         WidgetUtils::replace_widget( project_editor, "score", new WTS::ScoreEditor );
-
+        WidgetUtils::replace_widget( project_editor, "sequencer", new WTS::SequencerTimeLine );
     }
     NOP_OR(stacker)->addWidget(detail->widgets["project_editor"]);
 

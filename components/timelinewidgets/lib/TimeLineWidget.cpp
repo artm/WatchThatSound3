@@ -169,6 +169,8 @@ void TimeLineWidget::mouseMoveEvent ( QMouseEvent * event )
 
 void TimeLineWidget::doSeekOnDrag( QMouseEvent * event )
 {
+    if (!project()) return;
+
     if (seekOnDrag()) {
         if (event->buttons() & Qt::LeftButton) {
             qint64 t = project()->duration() * event->x() / (qint64)width();
