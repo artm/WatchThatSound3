@@ -9,6 +9,7 @@ HEADERS = \
     Macros.hpp \
     DialogSpecHelper.hpp \
     WidgetUtils.hpp \
-    Exception.hpp
+    Exception.hpp \
+    Let.hpp
 wts.top.relative = ../../..
 include( $$wts.top.relative/common.pri )

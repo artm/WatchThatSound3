@@ -7,6 +7,7 @@
 #include "utils/WidgetUtils"
 
 #include "timelinewidgets/StoryBoard"
+#include "timelinewidgets/CurveEditor"
 #include "timelinewidgets/ScoreEditor"
 
 struct WtsShell::Detail {
@@ -114,6 +115,7 @@ void WtsShell::assemble()
         // TODO
 
         WidgetUtils::replace_widget( project_editor, "storyboard", new WTS::StoryBoard );
+        WidgetUtils::replace_widget( project_editor, "tension", new WTS::CurveEditor );
         WidgetUtils::replace_widget( project_editor, "score", new WTS::ScoreEditor );
 
     }

@@ -21,7 +21,7 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="QGraphicsView" name="graphicsView">
+    <widget class="QGraphicsView" name="tension">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
        <horstretch>0</horstretch>
