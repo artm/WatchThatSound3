@@ -44,6 +44,8 @@ void StoryBoard::drawBackground ( QPainter * painter, const QRectF & rect )
 {
     TimeLineWidget::drawBackground(painter, rect);
 
+    if (!project()) return;
+
     painter->setFont( QFont("Monaco", 9) );
 
     int maxLines = width() / 5;
@@ -81,6 +83,8 @@ void StoryBoard::drawBackground ( QPainter * painter, const QRectF & rect )
 
 void StoryBoard::updateSnapshots()
 {
+    if (!project()) return;
+
     float tt = project()->duration();
 
     foreach(QGraphicsItem * item, m_msToItem) {
