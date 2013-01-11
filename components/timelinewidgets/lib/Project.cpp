@@ -732,11 +732,14 @@ void WTS::Project::drawScore( const QList<WTS::ScoreSymbol *>& score, qint64 sta
 
 qint64 WTS::Project::duration() const {
     THROW_IF_INVALID();
-    return m_detail->bioscope ? m_detail->bioscope->duration() : m_duration; }
+    return m_detail->bioscope ? m_detail->bioscope->duration() : m_duration;
+}
+
 int WTS::Project::videoWidth() const {
     THROW_IF_INVALID();
     return m_detail->bioscope->width();
 }
+
 int WTS::Project::videoHeight() const {
     THROW_IF_INVALID();
     return m_detail->bioscope->height();
