@@ -28,11 +28,15 @@ QDialog *WidgetUtils::load_dialog(QWidget *widget, const QString &url)
 
 void WidgetUtils::replace_widget(QWidget *container, const QString &widget_name, QWidget *new_widget)
 {
-    new_widget->setObjectName(widget_name);
-
     QWidget * old_widget = container->findChild<QWidget*>(widget_name);
     if (!old_widget)
         RAISE_A(WidgetNotFound, widget_name);
+
+    new_widget->setObjectName(widget_name);
+
+    new_widget->setMinimumSize( old_widget->minimumSize() );
+    new_widget->setSizePolicy( old_widget->sizePolicy() );
+
     // destroy old widget when this function returns
     QScopedPointer<QWidget> destroyer(old_widget);
 

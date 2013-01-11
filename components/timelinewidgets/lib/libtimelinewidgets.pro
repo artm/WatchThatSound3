@@ -15,7 +15,8 @@ SOURCES = TimeLineWidget.cpp \
     StoryBoard.cpp \
     TimeLineItem.cpp \
     CurveEditor.cpp \
-    SequencerTimeLine.cpp
+    SequencerTimeLine.cpp \
+    WaveformWidget.cpp
 HEADERS = TimeLineWidget.hpp \
     TimeLineController.hpp \
     EditController.hpp \
@@ -33,7 +34,8 @@ HEADERS = TimeLineWidget.hpp \
     StoryBoard.hpp \
     TimeLineItem.hpp \
     CurveEditor.hpp \
-    SequencerTimeLine.hpp
+    SequencerTimeLine.hpp \
+    WaveformWidget.hpp
 wts.components += bioscope
 wts.top.relative = ../../..
 include( $$wts.top.relative/common.pri )
