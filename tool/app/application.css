@@ -7,8 +7,18 @@ QToolButton {
   padding: 1px;
 }
 
-#display { background: black; }
+#video_half { background: black; }
 
+/* "selected" gradient */
+QGroupBox[active_state="2"]::title {
+  background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                              stop: 0 #fafafa,
+                              stop: 0.4 #efe,
+                              stop: 0.5 #efe,
+                              stop: 1.0 #afa);
+}
+
+/* record button */
 #record {
   background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
                               stop: 0.0 #fff,
@@ -41,43 +51,44 @@ QGroupBox::title {
 }
 
 QGroupBox[active_state="2"] { font-weight: bold; }
-QGroupBox[active_state="2"]::title {
-  background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                              stop: 0 #fafafa,
-                              stop: 0.4 #efe,
-                              stop: 0.5 #efe,
-                              stop: 1.0 #afa);
-}
-
-QGraphicsView { background: #f7f7f7; }
 QGroupBox[active_state="2"] QGraphicsView { background: #afa; }
 
 /* tab bar */
+
 QTabBar::tab {
-     font-size: 10px;
-     background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                 stop: 0 #E1E1E1, stop: 0.4 #DDDDDD,
-                                 stop: 0.5 #D8D8D8, stop: 1.0 #D3D3D3);
-     border: 2px solid #C4C4C3;
-     border-bottom-color: #eee;
-     border-top-left-radius: 4px;
-     border-top-right-radius: 4px;
+  font-size: 10px;
+  background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                              stop: 0 #E1E1E1, stop: 0.4 #DDDDDD,
+                              stop: 0.5 #D8D8D8, stop: 1.0 #D3D3D3);
+  border: 1px solid #9B9B9B;
+  border-bottom: 2px solid #C4C4C3;
+
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
 }
 
-QTabBar::tab:selected, QTabBar::tab:hover {
+QTabBar::tab:selected,
+QTabBar::tab:hover {
   background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                              stop: 0 #fafafa,
-                              stop: 0.4 #efe,
-                              stop: 0.5 #efe,
-                              stop: 1.0 #afa);
+                              stop: 0 #afa,
+                              stop: 0.2 #efe,
+                              stop: 0.5 #f7f7f7,
+                              stop: 1.0 #ddd);
 }
 
 QTabBar::tab:selected {
   font-weight: bold;
-  border-color: #9B9B9B;
-  border-bottom-color: #eee;
+  border: 2px solid #9B9B9B;
+  border-bottom-color: #ddd;
 }
 
 QTabBar::tab:!selected {
-      margin-top: 4px; /* make non-selected tabs look smaller */
+  margin-top: 4px; /* make non-selected tabs look smaller */
+}
+
+
+/* Splitter */
+QSplitter::handle {
+  background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                              stop: 0 #ddd, stop: 0.5 #fff, stop: 1 #eee);
 }

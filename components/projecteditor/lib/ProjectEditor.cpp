@@ -54,7 +54,8 @@ struct ProjectEditor::Detail
     {
         QWidget * button_bar = container->findChild<QWidget*>("buttons");
         container->setProperty("active_state", state);
-        WidgetUtils::update_widget_style(container);
+
+        QSizePolicy policy = container->sizePolicy();
 
         switch( state ) {
         case 0:
@@ -63,13 +64,19 @@ struct ProjectEditor::Detail
         case 1:
             NOP_OR(button_bar)->hide();
             container->show();
+            container->resize(0,0);
+            policy.setVerticalPolicy(QSizePolicy::Fixed);
             break;
         case 2:
             NOP_OR(button_bar)->show();
             container->show();
+            policy.setVerticalPolicy(QSizePolicy::Expanding);
             break;
         }
 
+        container->setSizePolicy(policy);
+
+        WidgetUtils::update_widget_style(container);
     }
 };
 
