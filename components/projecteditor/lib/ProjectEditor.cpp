@@ -1,6 +1,7 @@
 #include "ProjectEditor.hpp"
 #include "utils/WidgetUtils"
 #include "utils/Macros"
+#include "utils/Exception"
 
 struct ProjectEditor::Detail
 {
@@ -42,7 +43,7 @@ struct ProjectEditor::Detail
             if (!container) continue;
             try {
                 WidgetUtils::load_form(container, url);
-            } catch ( const WidgetUtils::ResourceNotFound& ) {
+            } catch ( const FileNotFound& ) {
                 // no form, ignore...
                 continue;
             }
