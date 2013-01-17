@@ -9,15 +9,6 @@ QToolButton {
 
 #video_half { background: black; }
 
-/* "selected" gradient */
-QGroupBox[active_state="2"]::title {
-  background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                              stop: 0 #fafafa,
-                              stop: 0.4 #efe,
-                              stop: 0.5 #efe,
-                              stop: 1.0 #afa);
-}
-
 /* record button */
 #record {
   background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
@@ -31,18 +22,17 @@ QGroupBox[active_state="2"]::title {
 QGroupBox {
   font-size: 10px;
   margin-top: 15px;
+  padding: 0 4px;
+  border: none;
 }
+
+QGroupBox[active_state="2"] {
+  font-weight: bold;
+  background: #7a7;
+  padding: 4px;
+}
+
 QGroupBox::title {
-  border-top: 1px solid #aaa;
-  border-left: 1px solid #aaa;
-  border-right: 1px solid #aaa;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-
-  background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                              stop: 0 #E1E1E1, stop: 0.4 #DDDDDD,
-                              stop: 0.5 #D8D8D8, stop: 1.0 #D3D3D3);
-
   subcontrol-origin: margin;
   subcontrol-position: top left;
   padding: 0 3px;
@@ -50,11 +40,10 @@ QGroupBox::title {
   margin-top: 2px;
 }
 
-QGroupBox[active_state="2"] { font-weight: bold; }
+QGraphicsView { border: 1px solid #777; background: #ddd; }
 QGroupBox[active_state="2"] QGraphicsView { background: #afa; }
 
 /* tab bar */
-
 QTabBar::tab {
   font-size: 10px;
   background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
@@ -78,14 +67,13 @@ QTabBar::tab:hover {
 
 QTabBar::tab:selected {
   font-weight: bold;
-  border: 2px solid #9B9B9B;
+  border-width: 2px;
   border-bottom-color: #ddd;
 }
 
 QTabBar::tab:!selected {
   margin-top: 4px; /* make non-selected tabs look smaller */
 }
-
 
 /* Splitter */
 QSplitter::handle {
