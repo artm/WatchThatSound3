@@ -3,29 +3,16 @@
 
 #include "stable.h"
 
+#include "utils/Exception"
+
 /// Access to framebased video files
 class Bioscope : public QObject
 {
     Q_OBJECT
 public:
-    struct Error {
-        explicit Error(const QString& message) : m_message(message) {}
-        QString message() { return m_message; }
-    private:
-        QString m_message;
-    };
-    struct IOError : public Error {
-        explicit IOError(const QString& path) : Error(QString("IOError(%1)").arg(path)) {}
-    };
-    struct NoFile : public Error {
-        explicit NoFile(const QString& path) : Error(QString("File %1 doesn't exist").arg(path)) {}
-    };
-    struct UnsupportedFile : public Error {
-        explicit UnsupportedFile(const QString& path) : Error(QString("Unsupported file: %1").arg(path)) {}
-    };
-    struct AVError : public Error {
-        explicit AVError(const QString& path, int av_err);
-    };
+    DEF_FORMAT_EXCEPTION( IOError, "IO Error: %1" );
+    DEF_FORMAT_EXCEPTION( UnsupportedFile, "Unsupported file: %1" );
+    DEF_FORMAT_EXCEPTION( AVError, "FFmpeg error: %1" );
 
     Bioscope(const QString& path, QObject *parent = 0);
     ~Bioscope();

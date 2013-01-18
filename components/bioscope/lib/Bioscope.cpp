@@ -39,20 +39,21 @@ struct Bioscope::Detail {
         if (formatContext) av_close_input_file(formatContext);
     }
 
+};
+
+struct AVCheck {
+    AVCheck(const QString& path) : m_path(path) {}
+
     static QString fferror(int av_err) {
         char buff[1024];
         return av_strerror(av_err, buff, sizeof(buff)) == 0
                 ? buff
                 : "Unknown ffmpeg error";
     }
-};
-
-struct AVCheck {
-    AVCheck(const QString& path) : m_path(path) {}
-    void operator<<(int av_err) {
-        if (av_err) {
-            throw Bioscope::AVError(m_path, av_err);
-        }
+    void operator<<(int av_err)
+    {
+        if (av_err)
+            RAISE_A( Bioscope::AVError, QString("%1: %2").arg(m_path).arg( fferror(av_err) ) );
     }
 private:
     QString m_path;
@@ -60,18 +61,13 @@ private:
 
 bool Bioscope::Detail::avInitialized = false;
 
-Bioscope::AVError::AVError(const QString &path, int av_err) :
-    Error(QString("FFMpeg error at %1: %2").arg(path).arg( Detail::fferror(av_err) ))
-{}
-
 Bioscope::Bioscope(const QString & _path, QObject *parent) :
     QObject(parent),
     m_detail( new Detail )
 {
     QString path = QFileInfo(_path).canonicalFilePath();
 
-    if (path.isEmpty())
-        throw NoFile(_path);
+    REQUIRE_FILE(path);
 
     AVCheck check(path);
 
@@ -91,11 +87,13 @@ Bioscope::Bioscope(const QString & _path, QObject *parent) :
             break;
         }
     }
-    if (m_detail->vStreamIndex < 0) throw UnsupportedFile(path);
+    if (m_detail->vStreamIndex < 0)
+        RAISE_A(UnsupportedFile, path);
 
     m_detail->codecContext = m_detail->formatContext->streams[m_detail->vStreamIndex]->codec;
     m_detail->codec = avcodec_find_decoder(m_detail->codecContext->codec_id);
-    if (m_detail->codec == 0) throw UnsupportedFile(path);
+    if (m_detail->codec == 0)
+        RAISE_A(UnsupportedFile, path);
 
     check << avcodec_open(m_detail->codecContext, m_detail->codec);
 
