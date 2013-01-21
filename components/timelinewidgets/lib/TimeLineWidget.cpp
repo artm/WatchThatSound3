@@ -21,22 +21,12 @@ TimeLineWidget::TimeLineWidget(QWidget *parent)
     , m_deafToSeek(false)
 {
 #if 0
-    // find the mainWindow
-    QObject * iter = parent;
-    while(iter && !iter->inherits("WTS::MainWindow"))
-        iter = iter->parent();
-    if (!iter)
-        qCritical("TimeLineWidget should be descendant of MainWindow in view hierarchy");
-    m_mainWindow = qobject_cast<MainWindow *>(iter);
     m_controller = m_mainWindow->editController();
-
-    connect(m_mainWindow,SIGNAL(projectChanged(Project*)),SLOT(setProject(Project*)));
-
     connect(m_mainWindow,SIGNAL(storyBoardChanged()),SLOT(invalidateBackground()));
     connect(m_mainWindow,SIGNAL(samplerClock(qint64)),SLOT(setCurrentTime(qint64)));
 #else
-    FIXME("make sure time line gets connected to the\n"
-          "project change / story board change / sampler clock signals");
+    FIXME("set TimeLine's edit controller");
+    FIXME("connect TimeLine's slots");
 #endif
 
     setScene(new QGraphicsScene(0.0,0.0,1.0,1.0,this));
@@ -143,8 +133,7 @@ void TimeLineWidget::drawBackground ( QPainter * painter, const QRectF & rect )
     }
 
     painter->setPen(QColor(255,100,100,127));
-    // painter->drawPath( m_mainWindow->tensionCurve() );
-    FIXME("draw tension curve in the background");
+    painter->drawPath( m_project->tensionCurve( 1.0, 1.0 ) );
 
     if (m_editMode) {
         painter->setPen(QColor(255,100,100));

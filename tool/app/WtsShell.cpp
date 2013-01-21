@@ -12,11 +12,15 @@
 #include "timelinewidgets/SequencerTimeLine"
 #include "timelinewidgets/WaveformWidget"
 
+#include "timelinewidgets/Project"
+
 struct WtsShell::Detail {
     QMainWindow * main_window;
     SlidingStackedWidget * stacker;
     QStandardItemModel models[4];
     QHash<QString, QWidget *> widgets;
+
+    WTS::Project * project;
 
     Detail() :
         main_window(NULL),
@@ -64,6 +68,15 @@ struct WtsShell::Detail {
         start_page->connect_signals();
 
     #undef SET_MODEL
+    }
+
+    void open_project(const QString& project_file_name) {
+        REQUIRE_FILE( project_file_name );
+        project = new WTS::Project( project_file_name );
+
+        foreach(WTS::TimeLineWidget* timeline,  main_window->findChildren<WTS::TimeLineWidget*>()) {
+            timeline->setProject( project );
+        }
     }
 };
 
@@ -133,7 +146,15 @@ void WtsShell::start()
     Q_ASSERT(detail->main_window);
 
     QStringList args = QCoreApplication::arguments();
-    if (args.contains("--open-project")) {
+    int open_flag_index = args.indexOf("--open-project");
+    if (open_flag_index >= 0) {
+        if (open_flag_index + 1 < args.size()) {
+            QString project_file_name = args[ open_flag_index + 1 ]
+                    .replace("~", QProcessEnvironment::systemEnvironment().value("HOME","~") );
+
+            detail->open_project( project_file_name );
+        }
+
         detail->stacker->setCurrentWidget( widget("project_editor") );
     }
 
