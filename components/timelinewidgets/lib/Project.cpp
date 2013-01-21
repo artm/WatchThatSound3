@@ -63,7 +63,7 @@ void Project::setup()
 }
 
 Project::Project(const QString& path, QObject * parent)
-    : QObject(parent)
+    : QObject(parent), m_detail(new Detail)
 {
     setup();
 
