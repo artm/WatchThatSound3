@@ -1,4 +1,5 @@
 #include "ProjectEditor.hpp"
+
 #include "utils/WidgetUtils"
 #include "utils/Macros"
 #include "utils/Exception"
@@ -53,6 +54,8 @@ struct ProjectEditor::Detail
     void set_widget_state( QWidget * container, int state )
     {
         QWidget * button_bar = container->findChild<QWidget*>("buttons");
+        QGraphicsView * time_line = container->findChild<QGraphicsView*>();
+
         container->setProperty("active_state", state);
 
         QSizePolicy policy = container->sizePolicy();
@@ -62,13 +65,15 @@ struct ProjectEditor::Detail
             container->hide();
             break;
         case 1:
-            NOP_OR(button_bar)->hide();
+            NOP_OR( button_bar )->hide();
+            NOP_OR( time_line )->setProperty("editMode", false);
             container->show();
             container->resize(0,0);
             policy.setVerticalPolicy(QSizePolicy::Fixed);
             break;
         case 2:
             NOP_OR(button_bar)->show();
+            NOP_OR( time_line )->setProperty("editMode", true);
             container->show();
             policy.setVerticalPolicy(QSizePolicy::Expanding);
             break;
