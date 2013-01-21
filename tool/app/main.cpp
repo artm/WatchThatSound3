@@ -41,9 +41,6 @@ int main(int argc, char * argv[])
         } catch( const Exception& ex ) {
             qDebug() << ex.message;
             return 100;
-        } catch ( ... ) {
-            qDebug() << "Unhandled unknown exception";
-            return 100;
         }
     }
 
