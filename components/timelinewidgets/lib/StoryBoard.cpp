@@ -2,6 +2,8 @@
 #include "Project.hpp"
 #include "TimeLineItem.hpp"
 
+#include "bioscope/Bioscope"
+
 #include <cmath>
 
 using namespace WTS;
@@ -175,5 +177,6 @@ void StoryBoard::setProject(Project *project)
 {
     TimeLineWidget::setProject(project);
     connect(project, SIGNAL(storyBoardChanged()), SLOT(updateSnapshots()));
+    setVideoSize( project->bioscope()->width(), project->bioscope()->height() );
 }
 
