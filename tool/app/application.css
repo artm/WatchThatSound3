@@ -28,8 +28,9 @@ QGroupBox {
 
 QGroupBox[active_state="2"] {
   font-weight: bold;
-  background: #7a7;
+  background: #d0e0d0;
   padding: 4px;
+  border-radius: 4px;
 }
 
 QGroupBox::title {
@@ -40,8 +41,18 @@ QGroupBox::title {
   margin-top: 2px;
 }
 
-QGraphicsView { border: 1px solid #777; background: #ddd; }
-QGroupBox[active_state="2"] QGraphicsView { background: #afa; }
+QGraphicsView {
+  border: 1px solid #777;
+  color: #777;
+}
+QGraphicsView[editMode="false"] {
+  color: #bbb;
+}
+
+QGraphicsView[editMode="true"] {
+  background-color: #afa;
+  alternate-background-color: #9e9;
+}
 
 /* tab bar */
 QTabBar::tab {

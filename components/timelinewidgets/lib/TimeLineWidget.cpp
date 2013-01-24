@@ -31,7 +31,7 @@ TimeLineWidget::TimeLineWidget(QWidget *parent)
 
     setScene(new QGraphicsScene(0.0,0.0,1.0,1.0,this));
     m_cursorLine = new SharpLine(scene());
-    m_cursorLine->setPen( QPen(Qt::blue) );
+    m_cursorLine->setPen( palette().color( QPalette::HighlightedText ) );
     m_cursorLine->setZValue(10);
 
 
@@ -39,7 +39,7 @@ TimeLineWidget::TimeLineWidget(QWidget *parent)
     m_selectionRect->setVisible(false);
     m_selectionRect->setZValue(5);
     m_selectionRect->setPen( Qt::NoPen );
-    QColor selbg(Qt::blue);
+    QColor selbg( palette().color( QPalette::Highlight ) );
     selbg = selbg.lighter();
     selbg.setAlpha(100);
     m_selectionRect->setBrush( QBrush( selbg ) );
@@ -108,12 +108,10 @@ void TimeLineWidget::drawBackground ( QPainter * painter, const QRectF & rect )
     QPainter::RenderHints oldHints = painter->renderHints();
     painter->setRenderHint(QPainter::Antialiasing, false);
 
-    QColor colors[] = {
-        QColor(170,255,170),
-        QColor(200,255,200),
-    };
+    // alternating scene backgrounds
+    QVector<QColor> colors;
+    colors << palette().color( QPalette::Base ) << palette().color( QPalette::AlternateBase );
     int currentColor = 0;
-
     foreach(Project::Marker * marker,
             project()->getMarkers(Project::SCENE)) {
         qreal relX2 = (qreal)marker->at() / total;
@@ -125,7 +123,8 @@ void TimeLineWidget::drawBackground ( QPainter * painter, const QRectF & rect )
     // the last one: form relX1 to 1.0
     paintRange(painter, relX1, 1.0f - relX1, colors[currentColor]);
 
-    painter->setPen(QColor(0,0,0,200));
+    // event markers
+    painter->setPen( palette().color( foregroundRole() ) );
     foreach(Project::Marker * marker,
             project()->getMarkers(Project::EVENT)) {
         qreal relX2 = (qreal)marker->at() / total;
@@ -134,11 +133,6 @@ void TimeLineWidget::drawBackground ( QPainter * painter, const QRectF & rect )
 
     painter->setPen(QColor(255,100,100,127));
     painter->drawPath( m_project->tensionCurve( 1.0, 1.0 ) );
-
-    if (m_editMode) {
-        painter->setPen(QColor(255,100,100));
-        painter->drawRect( QRectF(0,0,1,1) );
-    }
 
     painter->setRenderHints(oldHints, true);
 }
