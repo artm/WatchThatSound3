@@ -8,38 +8,18 @@
 
 using namespace WTS;
 
-
 const int StoryBoard::s_levelCount = 5;
-const float StoryBoard::s_marginY = 0.05, StoryBoard::s_marginBottom = 0.1;
 
 StoryBoard::StoryBoard(QWidget *parent)
     : TimeLineWidget(parent)
-    , m_videoWidth(640)
-    , m_videoHeight(360)
+    , m_videoWidth(0)
+    , m_videoHeight(0)
+    , m_thumbMargin(5)
     , m_selectedThumb(0)
     , m_dragItem(0)
+    , m_tickHeight(4)
 {
     FIXME("connect(m_mainWindow,SIGNAL(storyBoardChanged()),SLOT(updateSnapshots()))");
-
-    QFrame * box = new QFrame();
-    box->setFrameShadow( QFrame::Raised );
-    box->setFrameShape( QFrame::Panel );
-    QHBoxLayout * layout = new QHBoxLayout(box);
-    layout->setMargin(0);
-    layout->setSpacing(0);
-
-    QPushButton * b = new QPushButton("<");
-    b->setFlat(true);
-    b->setMaximumSize(QSize(16,16));
-    layout->addWidget(b);
-    b = new QPushButton("x");
-    b->setFlat(true);
-    b->setMaximumSize(QSize(16,16));
-    layout->addWidget(b);
-    b = new QPushButton(">");
-    b->setFlat(true);
-    b->setMaximumSize(QSize(16,16));
-    layout->addWidget(b);
 }
 
 void StoryBoard::drawBackground ( QPainter * painter, const QRectF & rect )
@@ -60,12 +40,13 @@ void StoryBoard::drawBackground ( QPainter * painter, const QRectF & rect )
     for(i = 0; i<(Ncount-1) && ((totalMin * N[i]) > maxLines) ; ++i) {}
     float dx = 1.0f / (N[i] * totalMin);
 
+    float tick_height = (float)tickHeight() / height();
     painter->setPen(QColor(50,60,50));
     for(int j = 0; j<maxLines; ++j) {
         float x = dx * j;
 
         int rem = j % (int)N[i];
-        float y = 1.0 - (rem ? 0.5 * s_marginBottom : s_marginBottom);
+        float y = 1.0 - (rem ? tick_height : 2.0 * tick_height);
 
         painter->drawLine(QPointF(x,y),QPointF(x,1.0));
 
@@ -97,26 +78,29 @@ void StoryBoard::updateSnapshots()
     m_selectedThumb = 0;
 
     int n = 0;
-
+    float margin_bottom = 4.0 * m_tickHeight / height();
     foreach(Project::Marker * m,
             project()->getMarkers(Project::ANY, false)) {
         float x = (float)m->at() / tt - 0.5 * m_thumbWidth;
 
+        float margin_x = (float)m_thumbMargin / width();
+        float margin_y = (float)m_thumbMargin / height();
+
         int gapCount = s_levelCount - 1;
-        float y = s_marginY
+        float y = margin_y
                   // zig zag function
                   + fabs(n++ % (2*gapCount) - gapCount )
                   // fit centers between two margins + two halves
-                  * (1.0 - s_marginY - s_marginBottom - m_thumbHeight) / (float)gapCount;
+                  * (1.0 - margin_y - margin_bottom - m_thumbHeight) / (float)gapCount;
 
         TimeLineItem * tli = new TimeLineItem(m, scene());
         tli->setEditModeOnly(false);
 
         QGraphicsItem * frameItem = scene()->addRect(
-                QRectF(x - m_marginX,
-                       y - s_marginY,
-                       m_thumbWidth + 2.0*m_marginX,
-                       m_thumbHeight + s_marginY*2.0),
+                    QRectF(x - margin_x,
+                       y - margin_y,
+                       m_thumbWidth + margin_x * 2.0,
+                       m_thumbHeight + margin_y * 2.0),
                 QPen(Qt::NoPen),QBrush(QColor(255,255,255,150)));
         frameItem->setParentItem(tli);
 
@@ -134,12 +118,14 @@ void StoryBoard::resizeEvent ( QResizeEvent * event )
 {
     TimeLineWidget::resizeEvent(event);
 
-    m_thumbHeight = 0.55;
-    float pixH = (float)height() * m_thumbHeight;
+    float rel_thumb_height = 0.55f;
+    float pixH = std::min( 100.0f,  (float)height() * rel_thumb_height );
     float pixW = pixH * (float)m_videoWidth / (float)m_videoHeight;
     m_thumbWidth = pixW / (float)width();
+    m_thumbHeight = pixH / (float)height();
+
     m_thumbScale = pixH/(float) m_videoHeight;
-    m_marginX = s_marginY * (float)height() / (float)width();
+    m_thumbMargin = m_thumbMargin;
 
     updateSnapshots();
 }
