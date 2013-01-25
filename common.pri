@@ -67,3 +67,4 @@ main_exe {
 }
 
 message( "Building $$wts.target.sort '$$TARGET' from $$wts.pro.relative" )
+DEPENDPATH = $$INCLUDEPATH
