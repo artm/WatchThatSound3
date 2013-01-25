@@ -129,7 +129,7 @@ void WtsShell::assemble()
         // extra setup for real project editor
         // TODO
 
-        WidgetUtils::replace_widget( project_editor, "storyboard", new WTS::StoryBoard );
+        WidgetUtils::replace_widget( project_editor, "storyboard", new StoryBoard );
         WidgetUtils::replace_widget( project_editor, "tension", new WTS::CurveEditor );
         WidgetUtils::replace_widget( project_editor, "score", new WTS::ScoreEditor );
         WidgetUtils::replace_widget( project_editor, "sequencer", new WTS::SequencerTimeLine );
