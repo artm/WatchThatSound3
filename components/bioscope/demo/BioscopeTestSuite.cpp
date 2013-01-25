@@ -85,8 +85,8 @@ int BioscopeTestSuite::runTests()
         QStringList args = m_args;
         args.removeAll("--test");
         return QTest::qExec( this, args );
-    } catch (Bioscope::Error& e) {
-        qCritical() << qPrintable(e.message());
+    } catch (Exception& e) {
+        qCritical() << qPrintable(e.message);
         return 1;
     } catch (...) {
         return 1;
