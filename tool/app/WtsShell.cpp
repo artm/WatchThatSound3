@@ -77,6 +77,8 @@ struct WtsShell::Detail {
         foreach(WTS::TimeLineWidget* timeline,  main_window->findChildren<WTS::TimeLineWidget*>()) {
             timeline->setProject( project );
         }
+
+        project->load();
     }
 };
 

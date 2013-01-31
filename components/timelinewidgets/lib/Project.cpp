@@ -75,8 +75,6 @@ Project::Project(const QString& path, QObject * parent)
                 + ".data") );
     if (! m_dataDir.exists() )
         movieDir.mkdir( m_dataDir.dirName() );
-
-    load();
 }
 
 void Project::saveStoryboard(QXmlStreamWriter& xml)
