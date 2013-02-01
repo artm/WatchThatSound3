@@ -95,3 +95,15 @@ QSplitter::handle {
   background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
                               stop: 0 #ddd, stop: 0.5 #fff, stop: 1 #eee);
 }
+
+#sampleNameEdit {
+  background: rgba(0,0,0,50);
+  color: rgba(255,255,255,255);
+  border: 2px solid rgba(255,255,255,200);
+  border-radius: 6px;
+}
+
+#sampleNameEdit[acceptableInput="false"] {
+  background: rgba(255,0,0,100);
+  color: rgba(0,0,0,255);
+}

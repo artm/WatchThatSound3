@@ -11,6 +11,7 @@
 #include "timelinewidgets/ScoreEditor"
 #include "timelinewidgets/SequencerTimeLine"
 #include "timelinewidgets/WaveformWidget"
+#include "timelinewidgets/SampleNameValidator"
 
 #include "timelinewidgets/Project"
 
@@ -78,6 +79,13 @@ struct WtsShell::Detail {
             timeline->setProject( project );
         }
 
+        // setup validator
+        QLineEdit * namer = main_window->findChild<QLineEdit *>("sampleNameEdit");
+        WTS::WaveformWidget * wave = main_window->findChild<WTS::WaveformWidget *>();
+        Q_ASSERT(namer);
+        Q_ASSERT(wave);
+        namer->setValidator( new WTS::SampleNameValidator(wave, project));
+
         project->load();
     }
 };
@@ -140,6 +148,12 @@ void WtsShell::assemble()
 
         connect( seq, SIGNAL(bufferSelected(WtsAudio::BufferAt*)), wave, SLOT(updateWaveform(WtsAudio::BufferAt*)) );
         connect( wave, SIGNAL(rangeChanged(SoundBuffer*)), seq, SLOT(updateBuffer(SoundBuffer*)) );
+
+        QLineEdit * namer = wave->findChild<QLineEdit*>("sampleNameEdit");
+        if (namer) {
+            connect( namer, SIGNAL(textEdited(QString)), this, SLOT(update_sender_style()) );
+            connect( namer, SIGNAL(editingFinished()), this, SLOT(on_sampleNameEdit_editingFinished()) );
+        }
     }
     NOP_OR(stacker)->addWidget(detail->widgets["project_editor"]);
 
@@ -167,6 +181,13 @@ void WtsShell::start()
     detail->main_window->showMaximized();
 }
 
+void WtsShell::update_sender_style()
+{
+    QWidget * widget = qobject_cast<QWidget*>(sender());
+    if (widget)
+        WidgetUtils::update_widget_style( widget );
+}
+
 void WtsShell::add_widget(const QString& tag, QWidget* widget)
 {
     Q_ASSERT(detail);
@@ -183,4 +204,16 @@ QWidget * WtsShell::widget(const QString &tag)
 {
     Q_ASSERT(detail);
     return detail->widgets.value(tag,NULL);
+}
+
+void WtsShell::on_sampleNameEdit_editingFinished()
+{
+    QLineEdit * widget = qobject_cast<QLineEdit *>(sender());
+    WTS::SequencerTimeLine * time_line = detail->main_window->findChild<WTS::SequencerTimeLine *>();
+    Q_ASSERT(time_line);
+    WTS::WtsAudio::BufferAt * bat = time_line->selectedBufferAt();
+    if (!bat) return;
+    bat->buffer()->setName( widget->text() );
+    time_line->updateBuffer( bat->buffer() );
+    detail->project->save();
 }

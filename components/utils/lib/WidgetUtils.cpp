@@ -40,6 +40,8 @@ void WidgetUtils::replace_widget(QWidget *container, const QString &widget_name,
     // destroy old widget when this function returns
     QScopedPointer<QWidget> destroyer(old_widget);
 
+    new_widget->setLayout( old_widget->layout() );
+
     QWidget * parent = old_widget->parentWidget();
     Q_ASSERT(parent);
     QLayout * layout = parent->layout();

@@ -18,13 +18,16 @@ public:
         return qobject_cast<T>(widget(tag));
     }
 
+    QWidget * current_page();
+
 signals:
 
 public slots:
-    QWidget * current_page();
-
     void assemble();
     void start();
+    void update_sender_style();
+    void on_sampleNameEdit_editingFinished();
+
 private:
     class Detail;
     QScopedPointer<Detail> detail;
