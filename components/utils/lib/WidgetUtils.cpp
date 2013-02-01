@@ -40,7 +40,9 @@ void WidgetUtils::replace_widget(QWidget *container, const QString &widget_name,
     // destroy old widget when this function returns
     QScopedPointer<QWidget> destroyer(old_widget);
 
-    new_widget->setLayout( old_widget->layout() );
+    // copy the children hierarchy if layed out
+    if (old_widget->layout())
+        new_widget->setLayout( old_widget->layout() );
 
     QWidget * parent = old_widget->parentWidget();
     Q_ASSERT(parent);
