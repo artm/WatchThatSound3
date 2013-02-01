@@ -129,13 +129,17 @@ void WtsShell::assemble()
 
     USE_OR_INIT_WIDGET(ProjectEditor, project_editor) {
         // extra setup for real project editor
-        // TODO
-
         WidgetUtils::replace_widget( project_editor, "storyboard", new StoryBoard );
         WidgetUtils::replace_widget( project_editor, "tension", new WTS::CurveEditor );
         WidgetUtils::replace_widget( project_editor, "score", new WTS::ScoreEditor );
-        WidgetUtils::replace_widget( project_editor, "sequencer", new WTS::SequencerTimeLine );
-        WidgetUtils::replace_widget( project_editor, "waveform", new WTS::WaveformWidget );
+
+        WTS::SequencerTimeLine  * seq = new WTS::SequencerTimeLine;
+        WTS::WaveformWidget * wave = new WTS::WaveformWidget;
+        WidgetUtils::replace_widget( project_editor, "sequencer", seq );
+        WidgetUtils::replace_widget( project_editor, "waveform", wave );
+
+        connect( seq, SIGNAL(bufferSelected(WtsAudio::BufferAt*)), wave, SLOT(updateWaveform(WtsAudio::BufferAt*)) );
+        connect( wave, SIGNAL(rangeChanged(SoundBuffer*)), seq, SLOT(updateBuffer(SoundBuffer*)) );
     }
     NOP_OR(stacker)->addWidget(detail->widgets["project_editor"]);
 

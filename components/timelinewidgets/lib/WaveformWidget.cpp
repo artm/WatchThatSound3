@@ -151,7 +151,7 @@ void WTS::WaveformWidget::setProject(WTS::Project *project)
 {
     m_project = project;
     connect(this, SIGNAL(openInExternalApp(SoundBuffer*)), m_project, SLOT(openInExternalApp(SoundBuffer*)));
-    connect(this, SIGNAL(rangeChanged(SoundBuffer*)), project, SLOT(save()));
+    connect(this, SIGNAL(rangeChanged(SoundBuffer*)), m_project, SLOT(save()));
 }
 
 void WTS::WaveformWidget::tick(qint64 ms)
