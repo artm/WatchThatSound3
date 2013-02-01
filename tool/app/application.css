@@ -45,12 +45,14 @@ QGraphicsView {
   border: 1px solid #777;
   color: #777;
 
-  /* storyboard */
-  qproperty-tickHeight: 6; /* pixels */
-  qproperty-thumbMargin: 10; /* pixels */
 }
 QGraphicsView[editMode="false"] {
   color: #bbb;
+}
+
+StoryBoard {
+  qproperty-tickHeight: 6; /* pixels */
+  qproperty-thumbMargin: 5; /* pixels */
 }
 
 QGraphicsView[editMode="true"] {
