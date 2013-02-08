@@ -41,23 +41,30 @@ QGroupBox::title {
   margin-top: 2px;
 }
 
-QGraphicsView {
+/* all time line widgets */
+TimeLineWidget {
   border: 1px solid #777;
   color: #777;
 
 }
-QGraphicsView[editMode="false"] {
+/* read-only time lines */
+TimeLineWidget[editMode="false"] {
   color: #bbb;
 }
+/* editable time lines */
+TimeLineWidget[editMode="true"] {
+  background-color: #afa;
+  alternate-background-color: #9e9;
+}
 
+/* individual timelines */
 StoryBoard {
   qproperty-tickHeight: 6; /* pixels */
   qproperty-thumbMargin: 5; /* pixels */
 }
 
-QGraphicsView[editMode="true"] {
-  background-color: #afa;
-  alternate-background-color: #9e9;
+SequencerTimeLine {
+  qproperty-sampleHeight: 17; /* pixels */
 }
 
 /* tab bar */
