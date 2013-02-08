@@ -2,6 +2,8 @@
 #include "Project.hpp"
 #include "SoundBuffer.hpp"
 
+#include "utils/Macros"
+
 using namespace WTS;
 
 WaveformWidget::WaveformWidget(QWidget *parent) :
@@ -39,18 +41,14 @@ void WaveformWidget::updateWaveform(WtsAudio::BufferAt * bufferAt, bool recordin
             else
                 buffer->draw(m_img);
 
-            QLineEdit* nameEdit = findChild<QLineEdit*>("sampleNameEdit");
-            if (nameEdit) {
-                nameEdit->setText( m_buffer->buffer()->name() );
-            }
+            NOP_OR(findChild<QLineEdit*>("sampleNameEdit"))
+                    ->setText( m_buffer->buffer()->name() );
 
         } else {
             // became none
             clearWaveform();
-            QLineEdit* nameEdit = findChild<QLineEdit*>("sampleNameEdit");
-            if (nameEdit) {
-                nameEdit->setText( "" );
-            }
+            NOP_OR(findChild<QLineEdit*>("sampleNameEdit"))
+                    ->setText( "" );
         }
     }
 
