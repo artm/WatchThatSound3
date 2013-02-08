@@ -4,8 +4,6 @@
 #include "stable.h"
 #include "WtsAudio.hpp"
 
-namespace WTS {
-
 class Project;
 class SoundBuffer;
 
@@ -49,7 +47,5 @@ protected:
     qint64 m_selStart;
     Project * m_project;
 };
-
-}
 
 #endif // WAVEFORMWIDGET_H

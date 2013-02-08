@@ -4,8 +4,6 @@
 #include <QObject>
 #include <QMetaType>
 
-namespace WTS {
-
 class Synced : public QObject
 {
     Q_OBJECT
@@ -25,8 +23,6 @@ protected:
     qint64 m_at; // ms
 };
 
-} // namespace WTS
-
-Q_DECLARE_METATYPE(WTS::Synced*)
+Q_DECLARE_METATYPE(Synced*)
 
 #endif // SYNCED_H

@@ -1,9 +1,9 @@
 #include "TimeLineItem.hpp"
 #include "TimeLineWidget.hpp"
 
-using namespace WTS;
 
-TimeLineItem::TimeLineItem(WTS::Synced * synced, QGraphicsScene * scene)
+
+TimeLineItem::TimeLineItem(Synced * synced, QGraphicsScene * scene)
     : QGraphicsItem(0, scene)
     , m_synced(synced)
     , m_editModeOnly(true)

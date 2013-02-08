@@ -7,8 +7,6 @@
 #include <QObject>
 #include <QPointer>
 
-namespace WTS {
-
 class Project;
 
 /*
@@ -46,7 +44,5 @@ protected:
 
     qint64 m_cursorTime;
 };
-
-}
 
 #endif // TIMELINECONTROLLER_HPP

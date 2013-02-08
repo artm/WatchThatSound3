@@ -4,8 +4,6 @@
 #include "TimeLineWidget.hpp"
 #include "ScoreSymbol.hpp"
 
-namespace WTS {
-
 class ScoreEditor : public TimeLineWidget
 {
     Q_OBJECT
@@ -45,7 +43,5 @@ protected:
     static const float s_wheelInnerRadius;
     static const float s_wheelOuterRadius;
 };
-
-}
 
 #endif // SCOREEDITOR_H

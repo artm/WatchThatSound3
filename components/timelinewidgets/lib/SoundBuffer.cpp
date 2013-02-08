@@ -7,7 +7,7 @@
 
 #include <sndfile.hh>
 
-using namespace WTS;
+
 
 const float SoundBuffer::s_minScaleMax = 0.1;
 
@@ -179,7 +179,7 @@ void SoundBuffer::initGains()
     // What?
 }
 
-float WTS::SoundBuffer::draw(QPixmap& surface, bool recording, float scaleMax)
+float SoundBuffer::draw(QPixmap& surface, bool recording, float scaleMax)
 {
     QPainter painter(&surface);
     painter.setPen(QColor(0,0,0,100));
@@ -218,7 +218,7 @@ float WTS::SoundBuffer::draw(QPixmap& surface, bool recording, float scaleMax)
     return scaleMax;
 }
 
-QString WTS::SoundBuffer::makeFileName(const QString &name)
+QString SoundBuffer::makeFileName(const QString &name)
 {
     QString badsyms = "[^a-z0-9_]+";
     QRegExp lead( "^"+ badsyms, Qt::CaseInsensitive );

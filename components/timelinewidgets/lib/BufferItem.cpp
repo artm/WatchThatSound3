@@ -4,7 +4,7 @@
 #include "SoundBuffer.hpp"
 #include "TimeLineWidget.hpp"
 
-using namespace WTS;
+
 
 BufferItem::BufferItem(WtsAudio::BufferAt * buffer, qint64 duration, float height, QGraphicsView *view)
     : QGraphicsRectItem()
@@ -100,7 +100,7 @@ void BufferItem::update()
     m_title->setText( m_buffer->buffer()->name() );
 }
 
-void WTS::BufferItem::bufferChanged()
+void BufferItem::bufferChanged()
 {
     update();
 }

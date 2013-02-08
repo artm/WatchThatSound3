@@ -5,8 +5,6 @@
 #include "TimeLineController.hpp"
 #include "Project.hpp"
 
-namespace WTS {
-
 /* Main controller of the editor. Because we have single cursor for everything this controller is
  * responsible for driving the sequencer, knowing where to insert things etc.
  * It contains <DO SOMETHING>AtCursor() slots.
@@ -25,7 +23,5 @@ public slots:
     void addEventMarkerAtCursor();
 
 };
-
-}
 
 #endif // EDITCONTROLLER_HPP

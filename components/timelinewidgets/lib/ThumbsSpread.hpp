@@ -1,8 +1,6 @@
 #ifndef THUMBSSPREAD_H
 #define THUMBSSPREAD_H
 
-namespace WTS {
-
 namespace detail {
 struct Gap;
 
@@ -110,8 +108,6 @@ void spread( int total_width, int item_width, const Array& anchors, Array& resul
         result << std::max(0, std::min( total_width - item_width, cx - item_width/2));
     }
 #endif
-
-}
 
 }
 

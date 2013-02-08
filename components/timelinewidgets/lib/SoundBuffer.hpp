@@ -4,8 +4,6 @@
 #include "stable.h"
 #include "utils/Exception"
 
-namespace WTS {
-
 class SoundBuffer
 {
 public:
@@ -75,7 +73,5 @@ public:
 protected:
     float m_normGain, m_gain;
 };
-
-}
 
 #endif // SOUNDBUFFER_H

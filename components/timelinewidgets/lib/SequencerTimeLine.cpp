@@ -4,7 +4,22 @@
 
 #include "utils/Macros"
 
-using namespace WTS;
+
+
+struct SequencerTimeLine::Detail {
+    SequencerTimeLine * self;
+    QGraphicsItem * samples;
+    int sample_height;
+
+    Detail(SequencerTimeLine * _self)
+        : self(_self)
+        , samples( new QGraphicsItemGroup )
+        , sample_height( 10 )
+    {
+        self->scene()->addItem(samples);
+    }
+
+};
 
 SequencerTimeLine::SequencerTimeLine(QWidget *parent)
     : TimeLineWidget(parent)
@@ -12,8 +27,7 @@ SequencerTimeLine::SequencerTimeLine(QWidget *parent)
     , m_brush(Qt::white)
     , m_muteBrush(QColor(0,0,0,70))
     , m_dragItem(0)
-    , m_levelH(0.15)
-    , m_sampleH(0.17)
+    , detail( new Detail(this) )
 {
     FIXME("connect(m_mainWindow,SIGNAL(scratchUpdated(WtsAudio::BufferAt*,bool)), SLOT(showScratch(WtsAudio::BufferAt*,bool)))");
 
@@ -24,6 +38,10 @@ SequencerTimeLine::SequencerTimeLine(QWidget *parent)
     m_scratchRect->setZValue(1.0);
 
     setSeekOnDrag(true);
+}
+
+SequencerTimeLine::~SequencerTimeLine()
+{
 }
 
 void SequencerTimeLine::setProject(Project * project)
@@ -39,8 +57,9 @@ void SequencerTimeLine::insertBufferAt(WtsAudio::BufferAt * bufferAt)
 {
     SoundBuffer * buffer = bufferAt->buffer();
 
-    BufferItem * item = new BufferItem(bufferAt, project()->duration(), m_sampleH, this);
-    scene()->addItem(item);
+    BufferItem * item = new BufferItem(bufferAt, project()->duration(), 1.0f, this);
+    //scene()->addItem(item);
+    item->setParentItem( detail->samples );
 
     showRange(item, buffer);
 
@@ -57,6 +76,7 @@ void SequencerTimeLine::restackItems()
     QList<float> levelRight;
     qStableSort(m_bufferItems.begin(), m_bufferItems.end(), lefterItem);
     QList< BufferItem * >::iterator it;
+
     for(it = m_bufferItems.begin(); it != m_bufferItems.end(); ++it) {
         QGraphicsItem * item = *it;
         int until = levelRight.size();
@@ -67,7 +87,7 @@ void SequencerTimeLine::restackItems()
 
             if (x >= levelRight[level]) {
                 // insert on level
-                item->setY(m_levelH * (float) level);
+                item->setY(level);
                 levelRight[level] = x + item->boundingRect().width();
                 break;
             }
@@ -102,6 +122,10 @@ void SequencerTimeLine::mouseReleaseEvent ( QMouseEvent * event )
 void SequencerTimeLine::resizeEvent(QResizeEvent *event)
 {
     TimeLineWidget::resizeEvent(event);
+
+    QTransform transform( QTransform::fromScale(1, (float)sampleHeight() / height() ) );
+
+    detail->samples->setTransform( transform );
     foreach(BufferItem * item, m_bufferItems) {
         item->update();
     }
@@ -115,20 +139,20 @@ void SequencerTimeLine::showRange(QGraphicsItem * root, SoundBuffer *buffer)
     float selX2 = (float)WtsAudio::sampleCountToMs(buffer->rangeEnd()) / tt;
 
     QGraphicsRectItem * recti = scene()->addRect(
-                0, 0, selX1, m_sampleH,
+                0, 0, selX1, 1.0f,
                 Qt::NoPen, m_muteBrush );
     recti->setZValue(.5);
     recti->setParentItem(root);
 
     recti = scene()->addRect(
-                selX2, 0, relW-selX2, m_sampleH,
+                selX2, 0, relW-selX2, 1.0f,
                 Qt::NoPen, m_muteBrush );
     recti->setZValue(.5);
     recti->setParentItem(root);
 
     recti = scene()->addRect(
                 0, 0,
-                relW, m_sampleH,
+                relW, 1.0f,
                 m_pen, Qt::NoBrush );
     recti->setZValue(.5);
     recti->setParentItem(root);
@@ -173,13 +197,26 @@ void SequencerTimeLine::startSolo()
         emit startSolo(selected);
 }
 
-WtsAudio::BufferAt * WTS::SequencerTimeLine::selectedBufferAt()
+WtsAudio::BufferAt * SequencerTimeLine::selectedBufferAt()
 {
     QList<QGraphicsItem *> sel = scene()->selectedItems();
     if (sel.length() > 0) {
+        TRACE( QString("sel.length: %1").arg(sel.length()));
         BufferItem * bi = dynamic_cast<BufferItem*>(sel[0]);
         if (bi)
             return bi->buffer();
     }
     return 0;
 }
+
+int SequencerTimeLine::sampleHeight() const
+{
+    return detail->sample_height;
+}
+
+void SequencerTimeLine::setSampleHeight(int pixels)
+{
+    detail->sample_height = pixels;
+}
+
+

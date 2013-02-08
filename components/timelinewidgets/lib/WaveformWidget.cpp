@@ -4,7 +4,7 @@
 
 #include "utils/Macros"
 
-using namespace WTS;
+
 
 WaveformWidget::WaveformWidget(QWidget *parent) :
     QWidget(parent), m_curTime(-1), m_wasRecording(false), m_buffer(0)
@@ -138,27 +138,27 @@ void WaveformWidget::setGain(int volX)
     }
 }
 
-void WTS::WaveformWidget::openInExternalApp()
+void WaveformWidget::openInExternalApp()
 {
     if (m_buffer)
         emit openInExternalApp(m_buffer->buffer());
 
 }
 
-void WTS::WaveformWidget::setProject(WTS::Project *project)
+void WaveformWidget::setProject(Project *project)
 {
     m_project = project;
     connect(this, SIGNAL(openInExternalApp(SoundBuffer*)), m_project, SLOT(openInExternalApp(SoundBuffer*)));
     connect(this, SIGNAL(rangeChanged(SoundBuffer*)), m_project, SLOT(save()));
 }
 
-void WTS::WaveformWidget::tick(qint64 ms)
+void WaveformWidget::tick(qint64 ms)
 {
     m_curTime = ms;
     update();
 }
 
-WTS::SoundBuffer * WTS::WaveformWidget::soundBuffer()
+SoundBuffer * WaveformWidget::soundBuffer()
 {
     return m_buffer ? m_buffer->buffer() : NULL;
 }

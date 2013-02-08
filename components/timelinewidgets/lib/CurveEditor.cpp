@@ -2,7 +2,7 @@
 #include "Project.hpp"
 #include "utils/Let"
 
-using namespace WTS;
+
 
 CurveEditor::CurveEditor(QWidget *parent)
     : TimeLineWidget(parent)

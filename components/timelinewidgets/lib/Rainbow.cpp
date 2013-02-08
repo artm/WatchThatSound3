@@ -1,6 +1,6 @@
 #include "Rainbow.hpp"
 
-using namespace WTS;
+
 
 QColor Rainbow::getColor(int i, int a, int l)
 {

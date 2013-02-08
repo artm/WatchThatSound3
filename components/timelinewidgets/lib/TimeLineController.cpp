@@ -2,7 +2,7 @@
 #include "Project.hpp"
 #include "SoundBuffer.hpp"
 
-using namespace WTS;
+
 
 TimeLineController::TimeLineController(QObject *parent)
     : QObject(parent)

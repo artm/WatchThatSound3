@@ -18,7 +18,7 @@
 
 #define THROW_IF_INVALID() do { if (this!=NULL && !isValid()) RAISE_A(InvalidProject, QString("$1").arg((long long)this)); } while(false)
 
-using namespace WTS;
+
 
 struct Project::Detail {
     Bioscope * bioscope;
@@ -487,12 +487,12 @@ bool Project::isValid() const
     return m_detail->bioscope || m_duration > 0;
 }
 
-QString WTS::Project::pdfPath()
+QString Project::pdfPath()
 {
     return m_dataDir.filePath( movieFilename() + ".pdf" );
 }
 
-void WTS::Project::print(QPrinter &printer, const QList<WTS::ScoreSymbol *>& score)
+void Project::print(QPrinter &printer, const QList<ScoreSymbol *>& score)
 {
     // setup
     QPainter painter;
@@ -588,7 +588,7 @@ void WTS::Project::print(QPrinter &printer, const QList<WTS::ScoreSymbol *>& sco
     painter.end();
 }
 
-void WTS::Project::drawTimeScale(qint64 start, qint64 end,
+void Project::drawTimeScale(qint64 start, qint64 end,
                                  QPainter &painter, const QRect &target)
 {
     start /= 1000;//sec
@@ -641,7 +641,7 @@ void WTS::Project::drawTimeScale(qint64 start, qint64 end,
 }
 
 
-void WTS::Project::drawSceneThumbs(WTS::Project::Marker *sceneMarker,  qint64 start, qint64 end,
+void Project::drawSceneThumbs(Project::Marker *sceneMarker,  qint64 start, qint64 end,
                                    QPainter &painter, const QRect &target)
 {
     //int gap = 3.0f * MM_PER_INCH * painter.device()->logicalDpiX(); // 3 mm in dots
@@ -673,7 +673,7 @@ void WTS::Project::drawSceneThumbs(WTS::Project::Marker *sceneMarker,  qint64 st
 
     int thumb_width = thumb_height * m_detail->bioscope->width() / m_detail->bioscope->height();
     QList< int > offsets;
-    WTS::spread( target.width(), thumb_width + 2*thumb_margin, anchers, offsets );
+    spread( target.width(), thumb_width + 2*thumb_margin, anchers, offsets );
 
     // 4. draw
     for(int i = 0; i<drawMarkers.count(); i++)
@@ -692,7 +692,7 @@ void WTS::Project::drawSceneThumbs(WTS::Project::Marker *sceneMarker,  qint64 st
     }
 }
 
-void WTS::Project::drawScore( const QList<WTS::ScoreSymbol *>& score, qint64 startTime, qint64 endTime,
+void Project::drawScore( const QList<ScoreSymbol *>& score, qint64 startTime, qint64 endTime,
                               QPainter &painter, const QRect &target)
 {
     painter.save();
@@ -730,27 +730,27 @@ void WTS::Project::drawScore( const QList<WTS::ScoreSymbol *>& score, qint64 sta
     painter.restore();
 }
 
-qint64 WTS::Project::duration() const {
+qint64 Project::duration() const {
     THROW_IF_INVALID();
     return m_detail->bioscope ? m_detail->bioscope->duration() : m_duration;
 }
 
-int WTS::Project::videoWidth() const {
+int Project::videoWidth() const {
     THROW_IF_INVALID();
     return m_detail->bioscope->width();
 }
 
-int WTS::Project::videoHeight() const {
+int Project::videoHeight() const {
     THROW_IF_INVALID();
     return m_detail->bioscope->height();
 }
 
-Bioscope * WTS::Project::bioscope()
+Bioscope * Project::bioscope()
 {
     return m_detail->bioscope;
 }
 
-QString WTS::Project::moviePath() const
+QString Project::moviePath() const
 {
     return m_detail->path;
 }

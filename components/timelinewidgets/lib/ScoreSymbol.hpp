@@ -3,8 +3,6 @@
 
 #include "stable.h"
 
-namespace WTS {
-
 class ScoreSymbol : public QGraphicsItem
 {
 public:
@@ -61,7 +59,5 @@ protected:
 
     static const float s_maxThickness;
 };
-
-}
 
 #endif // SCORESYMBOL_H

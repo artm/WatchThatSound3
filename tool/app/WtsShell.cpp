@@ -21,7 +21,7 @@ struct WtsShell::Detail {
     QStandardItemModel models[4];
     QHash<QString, QWidget *> widgets;
 
-    WTS::Project * project;
+    Project * project;
 
     Detail() :
         main_window(NULL),
@@ -73,18 +73,18 @@ struct WtsShell::Detail {
 
     void open_project(const QString& project_file_name) {
         REQUIRE_FILE( project_file_name );
-        project = new WTS::Project( project_file_name );
+        project = new Project( project_file_name );
 
-        foreach(WTS::TimeLineWidget* timeline,  main_window->findChildren<WTS::TimeLineWidget*>()) {
+        foreach(TimeLineWidget* timeline,  main_window->findChildren<TimeLineWidget*>()) {
             timeline->setProject( project );
         }
 
         // setup validator
         QLineEdit * namer = main_window->findChild<QLineEdit *>("sampleNameEdit");
-        WTS::WaveformWidget * wave = main_window->findChild<WTS::WaveformWidget *>();
+        WaveformWidget * wave = main_window->findChild<WaveformWidget *>();
         Q_ASSERT(namer);
         Q_ASSERT(wave);
-        namer->setValidator( new WTS::SampleNameValidator(wave, project));
+        namer->setValidator( new SampleNameValidator(wave, project));
 
         project->load();
     }
@@ -138,16 +138,18 @@ void WtsShell::assemble()
     USE_OR_INIT_WIDGET(ProjectEditor, project_editor) {
         // extra setup for real project editor
         WidgetUtils::replace_widget( project_editor, "storyboard", new StoryBoard );
-        WidgetUtils::replace_widget( project_editor, "tension", new WTS::CurveEditor );
-        WidgetUtils::replace_widget( project_editor, "score", new WTS::ScoreEditor );
+        WidgetUtils::replace_widget( project_editor, "tension", new CurveEditor );
+        WidgetUtils::replace_widget( project_editor, "score", new ScoreEditor );
 
-        WTS::SequencerTimeLine  * seq = new WTS::SequencerTimeLine;
-        WTS::WaveformWidget * wave = new WTS::WaveformWidget;
+        SequencerTimeLine  * seq = new SequencerTimeLine;
+        WaveformWidget * wave = new WaveformWidget;
         WidgetUtils::replace_widget( project_editor, "sequencer", seq );
         WidgetUtils::replace_widget( project_editor, "waveform", wave );
 
-        connect( seq, SIGNAL(bufferSelected(WtsAudio::BufferAt*)), wave, SLOT(updateWaveform(WtsAudio::BufferAt*)) );
-        connect( wave, SIGNAL(rangeChanged(SoundBuffer*)), seq, SLOT(updateBuffer(SoundBuffer*)) );
+        connect( seq, SIGNAL(bufferSelected(WtsAudio::BufferAt*)),
+                 wave, SLOT(updateWaveform(WtsAudio::BufferAt*)) );
+        connect( wave, SIGNAL(rangeChanged(SoundBuffer*)),
+                 seq, SLOT(updateBuffer(SoundBuffer*)) );
 
         QLineEdit * namer = wave->findChild<QLineEdit*>("sampleNameEdit");
         if (namer) {
@@ -209,9 +211,9 @@ QWidget * WtsShell::widget(const QString &tag)
 void WtsShell::on_sampleNameEdit_editingFinished()
 {
     QLineEdit * widget = qobject_cast<QLineEdit *>(sender());
-    WTS::SequencerTimeLine * time_line = detail->main_window->findChild<WTS::SequencerTimeLine *>();
+    SequencerTimeLine * time_line = detail->main_window->findChild<SequencerTimeLine *>();
     Q_ASSERT(time_line);
-    WTS::WtsAudio::BufferAt * bat = time_line->selectedBufferAt();
+    WtsAudio::BufferAt * bat = time_line->selectedBufferAt();
     if (!bat) return;
     bat->buffer()->setName( widget->text() );
     time_line->updateBuffer( bat->buffer() );

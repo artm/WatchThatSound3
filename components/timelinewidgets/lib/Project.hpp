@@ -5,8 +5,6 @@
 
 class Bioscope;
 
-namespace WTS {
-
 class ScoreSymbol;
 
 /** Project data container.
@@ -22,7 +20,7 @@ public:
         ANY,
     };
 
-    class Marker : public WTS::Synced {
+    class Marker : public Synced {
     protected:
         MarkerType m_type;
         QPixmap m_snapshot;
@@ -31,7 +29,7 @@ public:
 
     public:
         Marker(MarkerType type, qint64 ms, QObject * parent)
-            : WTS::Synced(ms, parent)
+            : Synced(ms, parent)
             , m_type(type)
             , m_tension(0.5)
         {}
@@ -81,11 +79,11 @@ public slots:
     void openInExternalApp(SoundBuffer*);
     void setFinalTension(double value) { m_finalTension = value; }
     void setMarkerTension(int markerIndex, float tension);
-    void removalRequested(WTS::Synced* synced);
+    void removalRequested(Synced* synced);
 
     void save();
     void load();
-    void print(QPrinter&, const QList<WTS::ScoreSymbol *>&);
+    void print(QPrinter&, const QList<ScoreSymbol *>&);
 
     void setSecPerPage( int sec ) { setMsPerPage( (qint64)sec * 1000 ); }
     void setMsPerPage( qint64 ms ) { m_msPerPage = ms; }
@@ -100,7 +98,7 @@ signals:
     // changes
     void sampleChanged(SoundBuffer * sample);
     void newBufferAt(WtsAudio::BufferAt * bufferAt);
-    void syncedItemRemoved(WTS::Synced * synced);
+    void syncedItemRemoved(Synced * synced);
     void tensionChanged();
     void storyBoardChanged();
 
@@ -117,7 +115,7 @@ protected:
 
     void drawTimeScale( qint64 start, qint64 end, QPainter& painter, const QRect& target );
     void drawSceneThumbs( Marker * sceneMarker, qint64 start, qint64 end, QPainter& painter, const QRect& target );
-    void drawScore( const QList<WTS::ScoreSymbol *>& score, qint64 start, qint64 end, QPainter& painter, const QRect& target );
+    void drawScore( const QList<ScoreSymbol *>& score, qint64 start, qint64 end, QPainter& painter, const QRect& target );
 
     bool m_loading;
     double m_finalTension;
@@ -138,5 +136,3 @@ private:
     void setup();
     qint64 m_duration;
 };
-
-}

@@ -4,7 +4,7 @@
 #include "WaveformWidget.hpp"
 #include "SoundBuffer.hpp"
 
-using namespace WTS;
+
 
 SampleNameValidator::SampleNameValidator(WaveformWidget * waveform, Project * project) :
     QValidator(waveform),

@@ -3,7 +3,7 @@
 #include "Project.hpp"
 #include "utils/Macros"
 
-using namespace WTS;
+
 
 const int ScoreEditor::s_wheelColorCount = 8;
 const float ScoreEditor::s_wheelInnerRadius = 7;
@@ -219,9 +219,9 @@ void ScoreEditor::setProject(Project *project)
     connect(project, SIGNAL(saveSection(QXmlStreamWriter&)), SLOT(saveSection(QXmlStreamWriter&)));
 }
 
-QList<WTS::ScoreSymbol *> WTS::ScoreEditor::scoreSymbols()
+QList<ScoreSymbol *> ScoreEditor::scoreSymbols()
 {
-    QList<WTS::ScoreSymbol *> list;
+    QList<ScoreSymbol *> list;
     foreach(QGraphicsItem * item, scene()->items()) {
         ScoreSymbol * symbol = dynamic_cast<ScoreSymbol *>(item);
         if (!symbol || symbol == m_newSymbol) continue;

@@ -3,8 +3,6 @@
 
 #include "TimeLineWidget.hpp"
 
-namespace WTS {
-
 class CurveEditor : public TimeLineWidget
 {
     Q_OBJECT
@@ -36,7 +34,5 @@ protected:
 
     bool m_ignoreReload;
 };
-
-}
 
 #endif // CURVEEDITOR_H

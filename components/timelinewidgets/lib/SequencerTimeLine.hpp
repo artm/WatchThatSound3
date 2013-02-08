@@ -5,16 +5,19 @@
 #include "SoundBuffer.hpp"
 #include "WtsAudio.hpp"
 
-namespace WTS {
-
 class BufferItem;
 
 class SequencerTimeLine : public TimeLineWidget
 {
     Q_OBJECT
+    Q_PROPERTY( int sampleHeight READ sampleHeight WRITE setSampleHeight )
 public:
     explicit SequencerTimeLine(QWidget *parent = 0);
+    ~SequencerTimeLine();
     WtsAudio::BufferAt * selectedBufferAt();
+
+    int sampleHeight() const;
+    void setSampleHeight(int pixels);
 
 signals:
     void bufferSelected(WtsAudio::BufferAt * buffer);
@@ -38,16 +41,16 @@ protected:
 
     QList< BufferItem * > m_bufferItems;
 
-    float m_levelH, m_sampleH;
-
     void restackItems();
     void showRange(QGraphicsItem * root, SoundBuffer * buffer);
-    virtual void onRemoved(WTS::Synced * synced, QGraphicsItem * item);
+    virtual void onRemoved(Synced * synced, QGraphicsItem * item);
 
     virtual void mouseReleaseEvent ( QMouseEvent * event );
     virtual void resizeEvent ( QResizeEvent * event );
-};
 
-}
+private:
+    class Detail;
+    QScopedPointer< Detail > detail;
+};
 
 #endif // SEQUENCERTIMELINE_H

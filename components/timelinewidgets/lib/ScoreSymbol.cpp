@@ -1,7 +1,7 @@
 #include "ScoreSymbol.hpp"
 #include "TimeLineWidget.hpp"
 
-using namespace WTS;
+
 
 const float ScoreSymbol::s_maxThickness = 30;
 
@@ -168,7 +168,7 @@ void ScoreSymbol::updateGraphics()
     }
 }
 
-void WTS::ScoreSymbol::print(QPainter &painter, float hUnit, float vUnit)
+void ScoreSymbol::print(QPainter &painter, float hUnit, float vUnit)
 {
     painter.save();
     QPointF p2(x() + m_length, y());
@@ -279,7 +279,7 @@ void ScoreSymbol::keyReleaseEvent(QKeyEvent *event)
     }
 }
 
-bool WTS::ScoreSymbol::inHRange(float startTime, float endTime) const
+bool ScoreSymbol::inHRange(float startTime, float endTime) const
 {
     float x1 = x() + m_length;
     return (x() >= startTime && x() <= endTime) || (x1 >= startTime && x1 <= endTime);

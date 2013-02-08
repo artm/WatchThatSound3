@@ -3,7 +3,7 @@
 
 #include <cmath>
 
-using namespace WTS;
+
 
 struct PortAudioLogger {
     QString m_successMessage;

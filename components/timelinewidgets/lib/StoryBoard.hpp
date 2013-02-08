@@ -3,7 +3,7 @@
 
 #include "TimeLineWidget.hpp"
 
-class StoryBoard : public WTS::TimeLineWidget
+class StoryBoard : public TimeLineWidget
 {
     Q_OBJECT
     Q_PROPERTY( int tickHeight READ tickHeight WRITE setTickHeight )
@@ -22,7 +22,7 @@ public slots:
     void updateSnapshots();
     void setVideoSize(int w, int h);
     virtual void setCurrentTime(qint64 time);
-    virtual void setProject(WTS::Project * project);
+    virtual void setProject(Project * project);
 
 protected:
     virtual void resizeEvent ( QResizeEvent * event );

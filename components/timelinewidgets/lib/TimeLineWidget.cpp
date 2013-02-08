@@ -11,7 +11,7 @@
 //#include "ui_MainWindow.h"
 #include <QMouseEvent>
 
-using namespace WTS;
+
 
 TimeLineWidget::TimeLineWidget(QWidget *parent)
     : QGraphicsView(parent)
@@ -55,7 +55,7 @@ void TimeLineWidget::setProject(Project * project)
     m_project = project;
     // connect common notifications...
     connect(project, SIGNAL(tensionChanged()), SLOT(invalidateBackground()));
-    connect(project, SIGNAL(syncedItemRemoved(WTS::Synced*)), SLOT(syncedItemRemoved(WTS::Synced*)));
+    connect(project, SIGNAL(syncedItemRemoved(Synced*)), SLOT(syncedItemRemoved(Synced*)));
     connect(this, SIGNAL(dataChanged()), project, SLOT(save()));
 }
 
@@ -63,7 +63,7 @@ void TimeLineWidget::syncedItemRemoved(Synced *synced)
 {
     QList<QGraphicsItem *> items_list = items();
     foreach(QGraphicsItem * item, items_list) {
-        WTS::Synced * item_synced = item->data(SYNCED).value<WTS::Synced*>();
+        Synced * item_synced = item->data(SYNCED).value<Synced*>();
         if (synced == item_synced) {
             scene()->removeItem(item);
             item->setSelected(false);
@@ -164,7 +164,7 @@ void TimeLineWidget::doSeekOnDrag( QMouseEvent * event )
             if (dragged_b) {
                 t = dragged_b->buffer()->rangeStartAt();
             } else if (dragged) {
-                WTS::Synced * synced = 0;
+                Synced * synced = 0;
                 findSynced(dragged, &synced);
                 if (synced) {
                     t = synced->at();
@@ -180,18 +180,18 @@ void TimeLineWidget::doSeekOnDrag( QMouseEvent * event )
     }
 }
 
-void TimeLineWidget::assignSynced(QGraphicsItem *item, WTS::Synced *synced)
+void TimeLineWidget::assignSynced(QGraphicsItem *item, Synced *synced)
 {
     item->setData(SYNCED, QVariant::fromValue(synced));
 }
 
-QGraphicsItem * TimeLineWidget::findSynced(QGraphicsItem *item, WTS::Synced **synced)
+QGraphicsItem * TimeLineWidget::findSynced(QGraphicsItem *item, Synced **synced)
 {
     while( item && !item->data(SYNCED).isValid() ) {
         item = item->parentItem();
     }
     if (item) {
-        *synced = item->data(SYNCED).value<WTS::Synced*>();
+        *synced = item->data(SYNCED).value<Synced*>();
         return item;
     } else {
         *synced = 0;
@@ -200,7 +200,7 @@ QGraphicsItem * TimeLineWidget::findSynced(QGraphicsItem *item, WTS::Synced **sy
 }
 
 Project *TimeLineWidget::project()
- {
+{
     return m_project;
 }
 
@@ -235,7 +235,7 @@ void TimeLineWidget::keyPressEvent(QKeyEvent *event)
     case Qt::Key_Delete:
         QList<QGraphicsItem *> selection = scene()->selectedItems();
         foreach(QGraphicsItem * i, selection) {
-            WTS::Synced * synced = 0;
+            Synced * synced = 0;
             QGraphicsItem * syncedItem = findSynced(i,&synced);
             if (syncedItem)
                 m_project->removalRequested( synced );

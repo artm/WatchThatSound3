@@ -6,7 +6,7 @@
 
 #include <cmath>
 
-using namespace WTS;
+
 
 struct StoryBoard::Detail {
     float thumbWidth, thumbHeight;
@@ -183,7 +183,7 @@ void StoryBoard::setCurrentTime(qint64 time)
     }
 }
 
-void StoryBoard::setProject(WTS::Project *project)
+void StoryBoard::setProject(Project *project)
 {
     TimeLineWidget::setProject(project);
     connect(project, SIGNAL(storyBoardChanged()), SLOT(updateSnapshots()));

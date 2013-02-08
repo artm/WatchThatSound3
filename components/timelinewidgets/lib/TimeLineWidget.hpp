@@ -3,8 +3,6 @@
 
 #include "stable.h"
 
-namespace WTS {
-
 class Synced;
 class Project;
 class EditController;
@@ -24,10 +22,10 @@ public:
         SYNCED = 1000
     };
 
-    static void assignSynced(QGraphicsItem * item, WTS::Synced * synced);
+    static void assignSynced(QGraphicsItem * item, Synced * synced);
     // find synced associated with given item or its ancestor
     // returns the item which has the synced associated
-    static QGraphicsItem * findSynced(QGraphicsItem * item, WTS::Synced ** synced);
+    static QGraphicsItem * findSynced(QGraphicsItem * item, Synced ** synced);
 
     Project * project();
 
@@ -47,7 +45,7 @@ public slots:
     virtual void setProject(Project * project);
 
     // project actually removed an item
-    void syncedItemRemoved(WTS::Synced * synced);
+    void syncedItemRemoved(Synced * synced);
 
 protected:
     //MainWindow * m_mainWindow;
@@ -69,14 +67,12 @@ protected:
     virtual void keyPressEvent(QKeyEvent *event);
 
     // view specific removal processing
-    virtual void onRemoved(WTS::Synced *, QGraphicsItem *) {}
+    virtual void onRemoved(Synced *, QGraphicsItem *) {}
 
     void doSeekOnDrag( QMouseEvent * event );
 
 private:
     bool m_editMode, m_deafToSeek;
 };
-
-}
 
 #endif // TIMELINEWIDGET_H

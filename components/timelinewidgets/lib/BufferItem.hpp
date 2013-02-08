@@ -7,8 +7,6 @@
 
 class QGraphicsView;
 
-namespace WTS {
-
 class BufferItem : public QGraphicsRectItem
 {
 public:
@@ -30,7 +28,5 @@ protected:
     QGraphicsPixmapItem * m_pixmap;
     QGraphicsSimpleTextItem * m_title;
 };
-
-}
 
 #endif // BUFFERITEM_H

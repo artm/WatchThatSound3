@@ -3,8 +3,6 @@
 
 #include "stable.h"
 
-namespace WTS {
-
 class Project;
 class WaveformWidget;
 
@@ -20,7 +18,5 @@ protected:
     Project * m_project;
     WaveformWidget * m_waveform;
 };
-
-}
 
 #endif // SAMPLENAMEVALIDATOR_HPP
